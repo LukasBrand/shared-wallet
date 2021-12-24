@@ -4,5 +4,12 @@
     <item
         android:id="@+id/add_expense"
         android:icon="@drawable/ic_baseline_add_24"
-        android:title="@string/list_expense_menu_add_expense" />
+        android:title="@string/list_expense_menu_add_expense"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/search_expense"
+        android:icon="@drawable/ic_search_black_24dp"
+        android:title="@string/list_expense_menu_search_expense"
+        app:actionViewClass="android.widget.SearchView"
+        app:showAsAction="ifRoom" />
 </menu>
