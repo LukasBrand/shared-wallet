@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "663425644222",
+    "project_id": "shared-wallet-33609",
+    "storage_bucket": "shared-wallet-33609.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:663425644222:android:c33bf8122e8a0a37a050ef",
+        "android_client_info": {
+          "package_name": "com.lukasbrand.sharedwallet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "663425644222-83dgr0td2ai9592hl1pmjh3buo6fs3hd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQ_ban52aeHjVLBevlsKJWtiGOy2W0HDU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "663425644222-83dgr0td2ai9592hl1pmjh3buo6fs3hd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

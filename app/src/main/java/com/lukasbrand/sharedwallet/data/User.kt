@@ -1,9 +1,9 @@
-package com.lukasbrand.sharedwallet.data.model
+package com.lukasbrand.sharedwallet.data
 
 /**
  * Data class that captures user information for logged in users retrieved from LoginRepository
  */
-data class LoggedInUser(
+data class User(
     val userId: String,
     val displayName: String
 )

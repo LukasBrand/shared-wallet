@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import android.util.Patterns
-import com.lukasbrand.sharedwallet.data.LoginRepository
+import com.lukasbrand.sharedwallet.repository.LoginRepository
 import com.lukasbrand.sharedwallet.data.Result
 
 import com.lukasbrand.sharedwallet.R
