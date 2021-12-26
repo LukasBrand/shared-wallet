@@ -4,6 +4,7 @@ plugins {
     id("kotlin-kapt")
     id("androidx.navigation.safeargs.kotlin")
     id("com.google.gms.google-services")
+    id("de.mannodermaus.android-junit5")
 }
 
 android {
@@ -38,6 +39,13 @@ android {
     dataBinding {
         isEnabled = true
     }
+
+    defaultConfig {
+        // 1) Make sure to use the AndroidJUnitRunner, or a subclass of it. This requires a dependency on androidx.test:runner, too!
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        // 2) Connect JUnit 5 to the runner
+        testInstrumentationRunnerArgument("runnerBuilder", "de.mannodermaus.junit5.AndroidJUnit5Builder")
+    }
 }
 
 dependencies {
@@ -59,9 +67,15 @@ dependencies {
     implementation ("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-firestore-ktx")
 
-    testImplementation ("junit:junit:4.+")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.2")
 
-    androidTestImplementation("androidx.test.ext:junit:1.1.3")
+    androidTestImplementation("androidx.test:runner:1.4.0")
+    androidTestImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
+    androidTestImplementation("de.mannodermaus.junit5:android-test-core:1.3.0")
+    androidTestRuntimeOnly("de.mannodermaus.junit5:android-test-runner:1.3.0")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
     androidTestImplementation("androidx.navigation:navigation-testing:2.3.5")
+
+    //androidTestImplementation("androidx.test.ext:junit:1.1.3")
 }
