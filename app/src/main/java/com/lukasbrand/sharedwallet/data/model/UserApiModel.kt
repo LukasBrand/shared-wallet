@@ -1,9 +1,8 @@
-package com.lukasbrand.sharedwallet.data
+package com.lukasbrand.sharedwallet.data.model
 
 import android.graphics.Bitmap
-import android.provider.ContactsContract
 
-data class User(
+data class UserApiModel(
     val id: String,
     val name: String,
     val email: String,

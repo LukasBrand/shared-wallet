@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
@@ -26,8 +25,17 @@ class ListExpensesFragment : Fragment() {
 
         setHasOptionsMenu(true)
 
+        val application = requireActivity().application
+
+        val dataSource = FirestoreDataSource.getInstance(application).expensesRemoteDataSource
+
+        val viewModelFactory = ListExpensesViewModelFactory(dataSource, application)
+
         val viewModel: ListExpensesViewModel =
-            ViewModelProvider(this)[ListExpensesViewModel::class.java]
+            ViewModelProvider(this, viewModelFactory)[ListExpensesViewModel::class.java]
+
+
+
 
         viewModel.navigateToExpenseDetail.observe(viewLifecycleOwner, { expenseId ->
             expenseId?.let {
@@ -39,13 +47,11 @@ class ListExpensesFragment : Fragment() {
             }
         })
 
-
         val adapter = ExpensesAdapter(ExpenseItemListener { expenseId: Long ->
             viewModel.onExpenseItemClicked(expenseId)
         })
         binding.listOfExpenses.adapter = adapter
         //adapter.submitList(it)
-
 
         return binding.root
     }

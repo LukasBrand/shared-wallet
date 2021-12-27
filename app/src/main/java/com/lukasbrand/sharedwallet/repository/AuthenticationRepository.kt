@@ -1,7 +1,6 @@
 package com.lukasbrand.sharedwallet.repository
 
-import com.lukasbrand.sharedwallet.database.LoginDatabase
-import com.lukasbrand.sharedwallet.data.Result
+import com.lukasbrand.sharedwallet.datasource.AuthenticationRemoteDataSource
 import com.lukasbrand.sharedwallet.data.User
 
 /**
@@ -9,7 +8,7 @@ import com.lukasbrand.sharedwallet.data.User
  * maintains an in-memory cache of login status and user credentials information.
  */
 
-class LoginRepository(val database: LoginDatabase) {
+class AuthenticationRepository(val remoteDataSource: AuthenticationRemoteDataSource) {
 
     // in-memory cache of the loggedInUser object
     var user: User? = null
@@ -26,12 +25,12 @@ class LoginRepository(val database: LoginDatabase) {
 
     fun logout() {
         user = null
-        database.logout()
+        remoteDataSource.logout()
     }
 
     fun login(username: String, password: String): Result<User> {
         // handle login
-        val result = database.login(username, password)
+        val result = remoteDataSource.login(username, password)
 
         if (result is Result.Success) {
             setLoggedInUser(result.data)

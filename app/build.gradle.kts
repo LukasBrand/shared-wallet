@@ -23,12 +23,15 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility =  JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
         jvmTarget = "1.8"
@@ -44,7 +47,14 @@ android {
         // 1) Make sure to use the AndroidJUnitRunner, or a subclass of it. This requires a dependency on androidx.test:runner, too!
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         // 2) Connect JUnit 5 to the runner
-        testInstrumentationRunnerArgument("runnerBuilder", "de.mannodermaus.junit5.AndroidJUnit5Builder")
+        testInstrumentationRunnerArguments["runnerBuilder"] =
+            "de.mannodermaus.junit5.AndroidJUnit5Builder"
+    }
+
+    junitPlatform {
+        instrumentationTests {
+            integrityCheckEnabled = true
+        }
     }
 }
 
@@ -62,9 +72,9 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0")
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
 
-    implementation ("com.google.android.gms:play-services-auth:19.2.0")
+    implementation("com.google.android.gms:play-services-auth:19.2.0")
     implementation(platform("com.google.firebase:firebase-bom:29.0.3"))
-    implementation ("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-firestore-ktx")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
@@ -74,8 +84,10 @@ dependencies {
     androidTestImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
     androidTestImplementation("de.mannodermaus.junit5:android-test-core:1.3.0")
     androidTestRuntimeOnly("de.mannodermaus.junit5:android-test-runner:1.3.0")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
+    //androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
     androidTestImplementation("androidx.navigation:navigation-testing:2.3.5")
+}
 
-    //androidTestImplementation("androidx.test.ext:junit:1.1.3")
+configurations.androidTestImplementation {
+    exclude(group = "junit", "junit")
 }

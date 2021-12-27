@@ -2,8 +2,8 @@ package com.lukasbrand.sharedwallet.ui.account.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.lukasbrand.sharedwallet.database.LoginDatabase
-import com.lukasbrand.sharedwallet.repository.LoginRepository
+import com.lukasbrand.sharedwallet.datasource.AuthenticationRemoteDataSource
+import com.lukasbrand.sharedwallet.repository.AuthenticationRepository
 
 /**
  * ViewModel provider factory to instantiate LoginViewModel.
@@ -15,8 +15,8 @@ class LoginViewModelFactory : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
             return LoginViewModel(
-                loginRepository = LoginRepository(
-                    database = LoginDatabase()
+                loginRepository = AuthenticationRepository(
+                    remoteDataSource = AuthenticationRemoteDataSource()
                 )
             ) as T
         }
