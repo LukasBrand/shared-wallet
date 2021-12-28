@@ -10,7 +10,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.lukasbrand.sharedwallet.R
 import com.lukasbrand.sharedwallet.databinding.ListExpensesFragmentBinding
+import com.lukasbrand.sharedwallet.datasource.ExpensesRemoteDataSource
+import com.lukasbrand.sharedwallet.datasource.firestore.FirestoreApi
+import com.lukasbrand.sharedwallet.repository.ExpensesRepository
 import com.lukasbrand.sharedwallet.ui.wallet.list.item.ExpenseItemListener
+import kotlinx.coroutines.Dispatchers
 
 class ListExpensesFragment : Fragment() {
 
@@ -27,9 +31,11 @@ class ListExpensesFragment : Fragment() {
 
         val application = requireActivity().application
 
-        val dataSource = FirestoreDataSource.getInstance(application).expensesRemoteDataSource
+        val firestoreApi = FirestoreApi.getInstance()
+        val dataSource = ExpensesRemoteDataSource(firestoreApi, Dispatchers.IO)
+        val repository = ExpensesRepository(dataSource)
 
-        val viewModelFactory = ListExpensesViewModelFactory(dataSource, application)
+        val viewModelFactory = ListExpensesViewModelFactory(repository, application)
 
         val viewModel: ListExpensesViewModel =
             ViewModelProvider(this, viewModelFactory)[ListExpensesViewModel::class.java]

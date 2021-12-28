@@ -6,6 +6,7 @@ import com.lukasbrand.sharedwallet.data.model.ExpenseApiModel
 import com.lukasbrand.sharedwallet.datasource.firestore.FirestoreApi
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 
@@ -26,8 +27,9 @@ class ExpensesRemoteDataSource(
         firestoreApi.removeExpense(expenseApiModel)
     }
 
-    suspend fun getExpenses(): Flow<List<ExpenseApiModel>> = withContext(ioDispatcher) {
-        firestoreApi.getExpenses()
+    @ExperimentalCoroutinesApi
+    suspend fun getExpenses(authId: String): Flow<List<ExpenseApiModel>> = withContext(ioDispatcher) {
+        firestoreApi.getExpenses(authId)
     }
 
 }

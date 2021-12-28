@@ -12,7 +12,7 @@ class ListExpensesViewModel(
 
     private val uiScope = viewModelScope
 
-    val expenses: LiveData<List<Expense>> = repository.fetchExpenses().asLiveData()
+    //val expenses: LiveData<List<Expense>> = repository.fetchExpenses().asLiveData()
 
 
     //Clickable Expense

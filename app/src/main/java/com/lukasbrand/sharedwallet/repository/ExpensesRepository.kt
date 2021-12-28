@@ -18,7 +18,7 @@ class ExpensesRepository(private val expensesRemoteDataSource: ExpensesRemoteDat
     suspend fun removeExpense(expenseApiModel: ExpenseApiModel): Unit =
         expensesRemoteDataSource.removeExpense(expenseApiModel)
 
-    suspend fun getExpenses(): Flow<List<ExpenseApiModel>> =
-        expensesRemoteDataSource.getExpenses()
+    suspend fun getExpenses(authId: String): Flow<List<ExpenseApiModel>> =
+        expensesRemoteDataSource.getExpenses(authId)
 
 }

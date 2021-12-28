@@ -16,13 +16,13 @@ class LoginViewModel(private val authenticationRepository: AuthenticationReposit
     private val _loginResult = MutableLiveData<LoginResult>()
     val loginResult: LiveData<LoginResult> = _loginResult
 
-    fun login(username: String, password: String) {
+    suspend fun login(username: String, password: String) {
         // can be launched in a separate asynchronous job
-        val result = authenticationRepository.login(username, password)
+        val result = authenticationRepository.signInWithEmailAndPassword(username, password)
 
-        if (result is Result.Success) {
+        if (result.isSuccess) {
             _loginResult.value =
-                LoginResult(success = LoggedInUserView(displayName = result.data.name))
+                LoginResult(success = LoggedInUserView(displayName = ""))
         } else {
             _loginResult.value = LoginResult(error = R.string.login_failed)
         }

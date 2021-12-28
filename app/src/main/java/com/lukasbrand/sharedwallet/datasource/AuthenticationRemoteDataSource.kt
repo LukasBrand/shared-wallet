@@ -1,16 +1,25 @@
 package com.lukasbrand.sharedwallet.datasource
 
-import com.lukasbrand.sharedwallet.data.User
+import com.lukasbrand.sharedwallet.datasource.firestore.FirebaseAuthApi
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.withContext
 
-class AuthenticationRemoteDataSource {
+class AuthenticationRemoteDataSource(
+    private val firestoreAuthApi: FirebaseAuthApi,
+    private val ioDispatcher: CoroutineDispatcher
+) {
 
+    suspend fun createAccountWithEmailAndPassword(email: String, password: String): Result<String> =
+        withContext(ioDispatcher) {
+            firestoreAuthApi.createAccountWithEmailAndPassword(email, password)
+        }
 
+    suspend fun signInWithEmailAndPassword(email: String, password: String): Result<String> =
+        withContext(ioDispatcher) {
+            firestoreAuthApi.signInWithEmailAndPassword(email, password)
+        }
 
-    fun login(username: String, password: String): Result<User> {
-        TODO()
-    }
-
-    fun logout() {
-        // TODO: revoke authentication
+    suspend fun signOut(): Unit = withContext(ioDispatcher) {
+        firestoreAuthApi.signOut()
     }
 }

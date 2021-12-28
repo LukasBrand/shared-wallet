@@ -22,7 +22,7 @@ class FirestoreDataSourceTest {
     @BeforeEach
     fun createDatabase() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
-        val firestoreApi = FirestoreApi.getInstance(context)
+        val firestoreApi = FirestoreApi.getInstance()
 
         expensesRemoteDataSource = ExpensesRemoteDataSource(firestoreApi, Dispatchers.IO)
         usersRemoteDataSource = UsersRemoteDataSource(firestoreApi, Dispatchers.IO)
