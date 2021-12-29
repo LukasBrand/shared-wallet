@@ -46,7 +46,7 @@ class FirestoreApi(private val firebaseFirestore: FirebaseFirestore) {
     suspend fun modifyExpense(expenseApiModel: ExpenseApiModel): Unit =
         suspendCancellableCoroutine { continuation ->
             val modifyExpenseDocRef =
-                firebaseFirestore.collection(EXPENSE_COLLECTION).document(expenseApiModel.id)
+                firebaseFirestore.collection(EXPENSE_COLLECTION).document(expenseApiModel.id!!)
             modifyExpenseDocRef.set(expenseApiModel)
                 .addOnSuccessListener {
                     continuation.resume(Unit)
@@ -58,7 +58,7 @@ class FirestoreApi(private val firebaseFirestore: FirebaseFirestore) {
     suspend fun removeExpense(expenseApiModel: ExpenseApiModel): Unit =
         suspendCancellableCoroutine { continuation ->
             val removeExpenseDocRef =
-                firebaseFirestore.collection(EXPENSE_COLLECTION).document(expenseApiModel.id)
+                firebaseFirestore.collection(EXPENSE_COLLECTION).document(expenseApiModel.id!!)
             removeExpenseDocRef.delete()
                 .addOnSuccessListener {
                     continuation.resume(Unit)
@@ -146,9 +146,24 @@ class FirestoreApi(private val firebaseFirestore: FirebaseFirestore) {
                 firebaseFirestore.collection(USER_COLLECTION).whereEqualTo("email", email)
             getUserRef.get()
                 .addOnSuccessListener { value ->
-                    val userId = value?.toObjects(String::class.java)?.first()
-                    if (userId != null) {
-                        continuation.resume(userId)
+                    val user = value.toObjects(UserApiModel::class.java).first()
+                    if (user != null) {
+                        continuation.resume(user.id)
+                    }
+                }.addOnFailureListener { exception ->
+                    continuation.resumeWithException(exception)
+                }
+        }
+
+    suspend fun getUser(userId: String) : UserApiModel =
+        suspendCancellableCoroutine { continuation ->
+            val getUserRef =
+                firebaseFirestore.collection(USER_COLLECTION).whereEqualTo("id", userId)
+            getUserRef.get()
+                .addOnSuccessListener { value ->
+                    val user = value.toObjects(UserApiModel::class.java).first()
+                    if (user != null) {
+                        continuation.resume(user)
                     }
                 }.addOnFailureListener { exception ->
                     continuation.resumeWithException(exception)

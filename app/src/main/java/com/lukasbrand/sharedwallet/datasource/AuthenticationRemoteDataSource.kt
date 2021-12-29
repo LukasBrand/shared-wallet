@@ -1,5 +1,6 @@
 package com.lukasbrand.sharedwallet.datasource
 
+import com.google.firebase.auth.FirebaseAuth
 import com.lukasbrand.sharedwallet.datasource.firestore.FirebaseAuthApi
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext

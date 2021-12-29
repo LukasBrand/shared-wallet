@@ -21,46 +21,71 @@
         android:paddingRight="@dimen/fragment_horizontal_margin"
         android:paddingBottom="@dimen/fragment_vertical_margin">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/hello_image"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            app:layout_constraintBottom_toTopOf="@id/email_register"
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Shared Wallet"
+            android:textSize="50sp"
+            app:layout_constraintBottom_toTopOf="@id/hello_image"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <ImageView
+            android:id="@+id/hello_image"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/ic_baseline_attach_money_24"
+            app:layout_constraintBottom_toTopOf="@id/email_register"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+        <Button
             android:id="@+id/email_register"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:text="@string/action_sign_in"
-            app:layout_constraintBottom_toBottomOf="@id/google_register"
+            app:layout_constraintBottom_toTopOf="@id/email_login"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/hello_image" />
 
-        <com.google.android.gms.common.SignInButton
-            android:id="@+id/google_register"
-            android:layout_width="wrap_content"
+        <Button
+            android:id="@+id/email_login"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
-            app:layout_constraintBottom_toTopOf="@id/github_register"
+            android:text="@string/action_log_in"
+            app:layout_constraintBottom_toTopOf="@id/google_login"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/email_register" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/github_register"
-            android:layout_width="wrap_content"
+        <Button
+            android:id="@+id/google_login"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
-            android:text="Sign in with Github"
+            android:text="@string/sign_in_with_google"
+            app:layout_constraintBottom_toTopOf="@id/github_login"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/email_login" />
+
+        <Button
+            android:id="@+id/github_login"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:text="@string/sign_in_with_github"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/google_register" />
+            app:layout_constraintTop_toBottomOf="@+id/google_login" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

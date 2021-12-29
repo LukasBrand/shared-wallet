@@ -37,13 +37,14 @@ class FirestoreDataSourceTest {
     fun insertAndGetExpense() {
         val ownerParticipant = User("1", "TestOwner", "test@mail.de", null)
         val expense = Expense(
-            1,
+            "1",
             "TestExpense",
             ownerParticipant,
             listOf(),
             Location(LocationManager.GPS_PROVIDER),
             Date(),
             Date(),
+            Currency.getInstance(""),
             listOf(),
             listOf()
         )

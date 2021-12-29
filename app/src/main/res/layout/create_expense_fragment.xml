@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -11,13 +12,125 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.wallet.create.CreateExpenseFragment">
+        android:layout_height="match_parent">
 
         <TextView
+            android:id="@+id/create_expense_header"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Hello" />
+            android:layout_height="wrap_content"
+            android:layout_margin="24dp"
+            android:text="Create new Expense"
+            android:textSize="34sp"
+            app:layout_constraintBottom_toTopOf="@+id/create_expense_scroll_view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ScrollView
+            android:id="@+id/create_expense_scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/create_expense_header">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginBottom="24dp"
+                tools:context=".ui.wallet.create.CreateExpenseFragment">
+
+
+                <EditText
+                    android:id="@+id/create_expense_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Name"
+                    android:minHeight="48dp"
+                    app:layout_constraintBottom_toTopOf="@+id/create_expense_location"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/create_expense_location"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Location"
+                    android:minHeight="48dp"
+                    app:layout_constraintBottom_toTopOf="@+id/create_expense_creation_date"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/create_expense_name" />
+
+                <Button
+                    android:id="@+id/create_expense_creation_date"
+                    android:layout_width="160dp"
+                    android:layout_height="48dp"
+                    android:text="Creation Date"
+                    app:layout_constraintBottom_toTopOf="@+id/create_expense_price"
+                    app:layout_constraintEnd_toStartOf="@+id/create_expense_due_date"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/create_expense_location" />
+
+                <Button
+                    android:id="@+id/create_expense_due_date"
+                    android:layout_width="178dp"
+                    android:layout_height="48dp"
+                    android:text="Due Date"
+                    app:layout_constraintBottom_toBottomOf="@+id/create_expense_creation_date"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/create_expense_creation_date"
+                    app:layout_constraintTop_toTopOf="@+id/create_expense_creation_date" />
+
+                <EditText
+                    android:id="@+id/create_expense_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Price"
+                    android:inputType="numberDecimal"
+                    android:minHeight="48dp"
+                    app:layout_constraintBottom_toTopOf="@+id/create_expense_add_participants_layout"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/create_expense_creation_date" />
+
+                <LinearLayout
+                    android:id="@+id/create_expense_add_participants_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toTopOf="@+id/create_expense_participants"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/create_expense_price">
+
+                    <ImageView
+                        android:id="@+id/create_expense_add_participants_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                    <Button
+                        android:id="@+id/create_expense_add_participants"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Add Participant" />
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/create_expense_participants"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/create_expense_add_participants_layout" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

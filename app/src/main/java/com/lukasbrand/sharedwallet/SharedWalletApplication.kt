@@ -1,5 +1,6 @@
 package com.lukasbrand.sharedwallet
 
+import android.accounts.AccountManager
 import android.app.Application
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,4 +20,5 @@ class SharedWalletApplication : Application() {
 
         }
     }
+
 }

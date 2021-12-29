@@ -4,6 +4,7 @@ import com.lukasbrand.sharedwallet.data.Expense
 import com.lukasbrand.sharedwallet.data.model.ExpenseApiModel
 import com.lukasbrand.sharedwallet.datasource.ExpensesRemoteDataSource
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 
@@ -18,6 +19,7 @@ class ExpensesRepository(private val expensesRemoteDataSource: ExpensesRemoteDat
     suspend fun removeExpense(expenseApiModel: ExpenseApiModel): Unit =
         expensesRemoteDataSource.removeExpense(expenseApiModel)
 
+    @ExperimentalCoroutinesApi
     suspend fun getExpenses(authId: String): Flow<List<ExpenseApiModel>> =
         expensesRemoteDataSource.getExpenses(authId)
 

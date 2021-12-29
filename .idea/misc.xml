@@ -8,7 +8,7 @@
         <entry key="..\:/Documents/AndroidStudioProjects/SharedWallet/app/src/main/res/drawable/ic_search_black_24dp.xml" value="0.3828125" />
         <entry key="..\:/Documents/AndroidStudioProjects/SharedWallet/app/src/main/res/layout/activity_main.xml" value="0.20520833333333333" />
         <entry key="..\:/Documents/AndroidStudioProjects/SharedWallet/app/src/main/res/layout/create_account_fragment.xml" value="0.33" />
-        <entry key="..\:/Documents/AndroidStudioProjects/SharedWallet/app/src/main/res/layout/create_expense_fragment.xml" value="0.36666666666666664" />
+        <entry key="..\:/Documents/AndroidStudioProjects/SharedWallet/app/src/main/res/layout/create_expense_fragment.xml" value="0.33" />
         <entry key="..\:/Documents/AndroidStudioProjects/SharedWallet/app/src/main/res/layout/fragment_login.xml" value="0.27898550724637683" />
         <entry key="..\:/Documents/AndroidStudioProjects/SharedWallet/app/src/main/res/layout/list_expense_item.xml" value="0.33" />
         <entry key="..\:/Documents/AndroidStudioProjects/SharedWallet/app/src/main/res/layout/list_expenses_fragment.xml" value="0.33" />
@@ -16,6 +16,7 @@
         <entry key="..\:/Documents/AndroidStudioProjects/SharedWallet/app/src/main/res/layout/show_account_fragment.xml" value="0.2753623188405797" />
         <entry key="..\:/Documents/AndroidStudioProjects/SharedWallet/app/src/main/res/layout/show_expense_fragment.xml" value="0.36666666666666664" />
         <entry key="..\:/Documents/AndroidStudioProjects/SharedWallet/app/src/main/res/layout/title_fragment.xml" value="0.36666666666666664" />
+        <entry key="..\:/Documents/AndroidStudioProjects/SharedWallet/app/src/main/res/menu/create_expense_menu.xml" value="0.36666666666666664" />
         <entry key="..\:/Documents/AndroidStudioProjects/SharedWallet/app/src/main/res/menu/list_expenses_menu.xml" value="0.33" />
         <entry key="..\:/Documents/AndroidStudioProjects/SharedWallet/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.3828125" />
         <entry key="..\:/Documents/AndroidStudioProjects/SharedWallet/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.3828125" />

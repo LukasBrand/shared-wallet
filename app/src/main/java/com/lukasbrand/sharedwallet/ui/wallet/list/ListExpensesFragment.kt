@@ -1,21 +1,25 @@
 package com.lukasbrand.sharedwallet.ui.wallet.list
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.view.*
-import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.lukasbrand.sharedwallet.R
 import com.lukasbrand.sharedwallet.databinding.ListExpensesFragmentBinding
 import com.lukasbrand.sharedwallet.datasource.ExpensesRemoteDataSource
+import com.lukasbrand.sharedwallet.datasource.UsersRemoteDataSource
 import com.lukasbrand.sharedwallet.datasource.firestore.FirestoreApi
 import com.lukasbrand.sharedwallet.repository.ExpensesRepository
+import com.lukasbrand.sharedwallet.repository.UsersRepository
 import com.lukasbrand.sharedwallet.ui.wallet.list.item.ExpenseItemListener
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@ExperimentalCoroutinesApi
 class ListExpensesFragment : Fragment() {
 
     //Initialize components:
@@ -29,18 +33,20 @@ class ListExpensesFragment : Fragment() {
 
         setHasOptionsMenu(true)
 
-        val application = requireActivity().application
+
+
 
         val firestoreApi = FirestoreApi.getInstance()
-        val dataSource = ExpensesRemoteDataSource(firestoreApi, Dispatchers.IO)
-        val repository = ExpensesRepository(dataSource)
+        val expensesRemoteDataSource = ExpensesRemoteDataSource(firestoreApi, Dispatchers.IO)
+        val usersRemoteDataSource = UsersRemoteDataSource(firestoreApi, Dispatchers.IO)
+        val expensesRepository = ExpensesRepository(expensesRemoteDataSource)
+        val usersRepository = UsersRepository(usersRemoteDataSource)
 
-        val viewModelFactory = ListExpensesViewModelFactory(repository, application)
+        val viewModelFactory =
+            ListExpensesViewModelFactory(expensesRepository, usersRepository)
 
         val viewModel: ListExpensesViewModel =
             ViewModelProvider(this, viewModelFactory)[ListExpensesViewModel::class.java]
-
-
 
 
         viewModel.navigateToExpenseDetail.observe(viewLifecycleOwner, { expenseId ->
@@ -53,11 +59,14 @@ class ListExpensesFragment : Fragment() {
             }
         })
 
-        val adapter = ExpensesAdapter(ExpenseItemListener { expenseId: Long ->
+        val adapter = ExpensesAdapter(ExpenseItemListener { expenseId: String ->
             viewModel.onExpenseItemClicked(expenseId)
         })
         binding.listOfExpenses.adapter = adapter
-        //adapter.submitList(it)
+
+        viewModel.expenses.observe(viewLifecycleOwner, { listOfExpenses ->
+            adapter.submitList(listOfExpenses)
+        })
 
         return binding.root
     }

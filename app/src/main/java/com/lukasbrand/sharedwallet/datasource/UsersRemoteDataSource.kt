@@ -1,11 +1,9 @@
 package com.lukasbrand.sharedwallet.datasource
 
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.auth.User
-import com.lukasbrand.sharedwallet.data.model.ExpenseApiModel
 import com.lukasbrand.sharedwallet.data.model.UserApiModel
 import com.lukasbrand.sharedwallet.datasource.firestore.FirestoreApi
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 
@@ -30,8 +28,13 @@ class UsersRemoteDataSource(
         firestoreApi.getUserIdFromEmail(email)
     }
 
+    @ExperimentalCoroutinesApi
     suspend fun getUsers(vararg userIds: String): Flow<List<UserApiModel>> =
         withContext(ioDispatcher) {
             firestoreApi.getUsers(userIds)
         }
+
+    suspend fun getUser(userId: String): UserApiModel = withContext(ioDispatcher) {
+        firestoreApi.getUser(userId)
+    }
 }

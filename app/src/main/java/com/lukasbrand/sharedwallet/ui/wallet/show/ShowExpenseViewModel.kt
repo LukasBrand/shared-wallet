@@ -8,7 +8,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.lukasbrand.sharedwallet.data.Expense
 
-class ShowExpenseViewModel(private val expenseId: Long) : ViewModel() {
+class ShowExpenseViewModel(private val expenseId: String) : ViewModel() {
 
     private val expense = MediatorLiveData<Expense>()
 

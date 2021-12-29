@@ -12,6 +12,15 @@
         <action
             android:id="@+id/action_listExpensesFragment_to_showExpenseFragment"
             app:destination="@id/showExpenseFragment" />
+        <action
+            android:id="@+id/action_listExpensesFragment_to_createExpenseFragment"
+            app:destination="@id/createExpenseFragment" />
+        <action
+            android:id="@+id/action_listExpensesFragment_to_showAccountFragment"
+            app:destination="@id/showAccountFragment" />
+        <action
+            android:id="@+id/action_listExpensesFragment_to_titleFragment"
+            app:destination="@id/titleFragment" />
     </fragment>
     <fragment
         android:id="@+id/showExpenseFragment"
@@ -20,14 +29,77 @@
         tools:layout="@layout/show_expense_fragment" >
         <argument
             android:name="expenseId"
-            app:argType="long" />
+            app:argType="string" />
         <action
             android:id="@+id/action_showExpenseFragment_to_listExpensesFragment"
             app:destination="@id/listExpensesFragment" />
+        <action
+            android:id="@+id/action_showExpenseFragment_to_updateExpenseFragment"
+            app:destination="@id/updateExpenseFragment" />
     </fragment>
     <fragment
         android:id="@+id/titleFragment"
         android:name="com.lukasbrand.sharedwallet.ui.title.TitleFragment"
         android:label="title_fragment"
-        tools:layout="@layout/title_fragment" />
+        tools:layout="@layout/title_fragment" >
+        <action
+            android:id="@+id/action_titleFragment_to_createAccountFragment"
+            app:destination="@id/createAccountFragment" />
+        <action
+            android:id="@+id/action_titleFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createAccountFragment"
+        android:name="com.lukasbrand.sharedwallet.ui.account.create.CreateAccountFragment"
+        android:label="create_account_fragment"
+        tools:layout="@layout/create_account_fragment" >
+        <action
+            android:id="@+id/action_createAccountFragment_to_listExpensesFragment"
+            app:destination="@id/listExpensesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.lukasbrand.sharedwallet.ui.account.login.LoginFragment"
+        android:label="login_fragment"
+        tools:layout="@layout/login_fragment" >
+        <action
+            android:id="@+id/action_loginFragment_to_listExpensesFragment"
+            app:destination="@id/listExpensesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createExpenseFragment"
+        android:name="com.lukasbrand.sharedwallet.ui.wallet.create.CreateExpenseFragment"
+        android:label="CreateExpenseFragment" >
+        <action
+            android:id="@+id/action_createExpenseFragment_to_listExpensesFragment"
+            app:destination="@id/listExpensesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/updateExpenseFragment"
+        android:name="com.lukasbrand.sharedwallet.ui.wallet.update.UpdateExpenseFragment"
+        android:label="UpdateExpenseFragment" >
+        <action
+            android:id="@+id/action_updateExpenseFragment_to_showExpenseFragment"
+            app:destination="@id/showExpenseFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/showAccountFragment"
+        android:name="com.lukasbrand.sharedwallet.ui.account.show.ShowAccountFragment"
+        android:label="ShowAccountFragment" >
+        <action
+            android:id="@+id/action_showAccountFragment_to_listExpensesFragment"
+            app:destination="@id/listExpensesFragment" />
+        <action
+            android:id="@+id/action_showAccountFragment_to_updateAccountFragment"
+            app:destination="@id/updateAccountFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/updateAccountFragment"
+        android:name="com.lukasbrand.sharedwallet.ui.account.update.UpdateAccountFragment"
+        android:label="UpdateAccountFragment" >
+        <action
+            android:id="@+id/action_updateAccountFragment_to_showAccountFragment"
+            app:destination="@id/showAccountFragment" />
+    </fragment>
 </navigation>
