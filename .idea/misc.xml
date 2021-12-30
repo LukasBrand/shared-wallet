@@ -8,7 +8,8 @@
         <entry key="..\:/Documents/AndroidStudioProjects/SharedWallet/app/src/main/res/drawable/ic_search_black_24dp.xml" value="0.3828125" />
         <entry key="..\:/Documents/AndroidStudioProjects/SharedWallet/app/src/main/res/layout/activity_main.xml" value="0.20520833333333333" />
         <entry key="..\:/Documents/AndroidStudioProjects/SharedWallet/app/src/main/res/layout/create_account_fragment.xml" value="0.33" />
-        <entry key="..\:/Documents/AndroidStudioProjects/SharedWallet/app/src/main/res/layout/create_expense_fragment.xml" value="0.33" />
+        <entry key="..\:/Documents/AndroidStudioProjects/SharedWallet/app/src/main/res/layout/create_expense_fragment.xml" value="0.25" />
+        <entry key="..\:/Documents/AndroidStudioProjects/SharedWallet/app/src/main/res/layout/create_expense_participants_item.xml" value="0.3170289855072464" />
         <entry key="..\:/Documents/AndroidStudioProjects/SharedWallet/app/src/main/res/layout/fragment_login.xml" value="0.27898550724637683" />
         <entry key="..\:/Documents/AndroidStudioProjects/SharedWallet/app/src/main/res/layout/list_expense_item.xml" value="0.33" />
         <entry key="..\:/Documents/AndroidStudioProjects/SharedWallet/app/src/main/res/layout/list_expenses_fragment.xml" value="0.33" />

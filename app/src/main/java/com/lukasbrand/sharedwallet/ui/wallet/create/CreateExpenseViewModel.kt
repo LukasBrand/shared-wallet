@@ -1,15 +1,15 @@
 package com.lukasbrand.sharedwallet.ui.wallet.create
 
-import android.app.DatePickerDialog
 import android.location.Location
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.lukasbrand.sharedwallet.data.User
+import androidx.lifecycle.*
+import com.lukasbrand.sharedwallet.data.ExpenseParticipant
 import com.lukasbrand.sharedwallet.data.model.ExpenseApiModel
 import com.lukasbrand.sharedwallet.repository.ExpensesRepository
 import com.lukasbrand.sharedwallet.repository.UsersRepository
 import kotlinx.coroutines.launch
+import java.math.BigDecimal
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class CreateExpenseViewModel(
@@ -18,15 +18,36 @@ class CreateExpenseViewModel(
 ) : ViewModel() {
 
     val owner = "" //TODO
-    val isPaid: List<Boolean> = listOf()
 
     val name: MutableLiveData<String> = MutableLiveData("")
-    val participants: MutableLiveData<List<User>> = MutableLiveData(listOf())
+
     val location: MutableLiveData<Location> = MutableLiveData()
-    val creationDate: MutableLiveData<Date> = MutableLiveData(Date(System.currentTimeMillis()))
-    val dueDate: MutableLiveData<Date> = MutableLiveData(Date(System.currentTimeMillis()))
-    val expenseAmount: MutableLiveData<Currency> = MutableLiveData()
-    val participantExpensePercentage: MutableLiveData<List<Double>> = MutableLiveData()
+
+    private val _creationDate: MutableLiveData<LocalDate> = MutableLiveData(LocalDate.now())
+    val creationDate: LiveData<String>
+        get() = _creationDate.map {
+            val formatter = DateTimeFormatter.ofPattern("dd-MMMM-yyyy")
+            it.format(formatter)
+        }
+
+    fun setCreationDate(date: LocalDate) {
+        _creationDate.value = date
+    }
+
+    private val _dueDate: MutableLiveData<LocalDate> = MutableLiveData(LocalDate.now())
+    val dueDate: LiveData<String>
+        get() = _dueDate.map {
+            val formatter = DateTimeFormatter.ofPattern("dd-MMMM-yyyy")
+            it.format(formatter)
+        }
+
+    fun setDueDate(date: LocalDate) {
+        _dueDate.value = date
+    }
+
+    val expenseAmountString: MutableLiveData<String> = MutableLiveData("0.00")
+
+    val participants: MutableLiveData<List<ExpenseParticipant>> = MutableLiveData()
 
     fun createExpense() {
         viewModelScope.launch {
@@ -34,13 +55,13 @@ class CreateExpenseViewModel(
                 null,
                 name.value!!,
                 owner,
-                participants.value!!.map { user -> user.id },
                 location.value!!,
-                creationDate.value!!,
-                dueDate.value!!,
-                expenseAmount.value!!,
-                participantExpensePercentage.value!!,
-                isPaid
+                Date(_creationDate.value!!.toEpochDay()),
+                Date(_dueDate.value!!.toEpochDay()),
+                BigDecimal(expenseAmountString.value!!),
+                participants.value!!.map { expenseParticipant -> expenseParticipant.user.id },
+                participants.value!!.map { expenseParticipant -> expenseParticipant.expensePercentage },
+                participants.value!!.map { expenseParticipant -> expenseParticipant.hasPaid }
             )
             expensesRepository.addExpense(expenseApiModel)
         }

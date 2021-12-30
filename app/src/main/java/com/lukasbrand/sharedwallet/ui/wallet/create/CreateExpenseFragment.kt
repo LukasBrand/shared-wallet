@@ -1,5 +1,6 @@
 package com.lukasbrand.sharedwallet.ui.wallet.create
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.*
 import androidx.databinding.DataBindingUtil
@@ -13,7 +14,12 @@ import com.lukasbrand.sharedwallet.datasource.UsersRemoteDataSource
 import com.lukasbrand.sharedwallet.datasource.firestore.FirestoreApi
 import com.lukasbrand.sharedwallet.repository.ExpensesRepository
 import com.lukasbrand.sharedwallet.repository.UsersRepository
+import com.lukasbrand.sharedwallet.ui.wallet.create.participant.ParticipantItemListener
+import com.lukasbrand.sharedwallet.ui.wallet.list.ExpensesAdapter
+import com.lukasbrand.sharedwallet.ui.wallet.list.item.ExpenseItemListener
 import kotlinx.coroutines.Dispatchers
+import java.time.LocalDate
+import java.util.*
 
 class CreateExpenseFragment : Fragment() {
 
@@ -23,6 +29,8 @@ class CreateExpenseFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        setHasOptionsMenu(true)
+
         val binding: CreateExpenseFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.create_expense_fragment, container, false)
 
@@ -40,7 +48,41 @@ class CreateExpenseFragment : Fragment() {
 
         binding.createExpenseViewModel = viewModel
 
+        binding.createExpenseCreationDate.setOnClickListener(this::clickDataPicker)
+        binding.createExpenseDueDate.setOnClickListener(this::clickDataPicker)
+
+        val adapter = ParticipantsAdapter(ParticipantItemListener { participantId: String ->
+            //TODO: add liveData to items inside participants list
+        })
+        binding.createExpenseParticipants.adapter = adapter
+
+        viewModel.participants.observe(viewLifecycleOwner, { listOfParticipants ->
+            adapter.submitList(listOfParticipants)
+        })
+
         return binding.root
+    }
+
+    private fun clickDataPicker(view: View) {
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+        val datePickerDialog = DatePickerDialog(
+            this.requireContext(),
+            { _, selectedYear, selectedMonth, selectedDay ->
+                val date = LocalDate.of(selectedYear, selectedMonth, selectedDay)
+                when (view.id) {
+                    R.id.create_expense_creation_date -> viewModel.setCreationDate(date)
+                    R.id.create_expense_due_date -> viewModel.setDueDate(date)
+                }
+            },
+            year,
+            month,
+            day
+        )
+        datePickerDialog.show()
     }
 
 

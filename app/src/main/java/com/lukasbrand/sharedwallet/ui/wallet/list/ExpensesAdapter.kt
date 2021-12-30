@@ -7,7 +7,8 @@ import com.lukasbrand.sharedwallet.ui.wallet.list.item.ExpenseItemDiffCallback
 import com.lukasbrand.sharedwallet.ui.wallet.list.item.ExpenseItemListener
 import com.lukasbrand.sharedwallet.ui.wallet.list.item.ExpenseItemViewHolder
 
-class ExpensesAdapter(val clickListener: ExpenseItemListener) : ListAdapter<Expense, ExpenseItemViewHolder>(ExpenseItemDiffCallback()) {
+class ExpensesAdapter(val clickListener: ExpenseItemListener) :
+    ListAdapter<Expense, ExpenseItemViewHolder>(ExpenseItemDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExpenseItemViewHolder {
         return ExpenseItemViewHolder.from(parent)

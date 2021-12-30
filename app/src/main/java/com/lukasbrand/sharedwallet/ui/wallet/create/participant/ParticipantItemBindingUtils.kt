@@ -1,4 +1,4 @@
-package com.lukasbrand.sharedwallet.ui.wallet.list.item
+package com.lukasbrand.sharedwallet.ui.wallet.create.participant
 
 import android.content.res.Resources
 import android.widget.ImageView
@@ -6,13 +6,14 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.lukasbrand.sharedwallet.R
 import com.lukasbrand.sharedwallet.data.Expense
+import com.lukasbrand.sharedwallet.data.ExpenseParticipant
 import java.util.*
 
 
-@BindingAdapter("expenseItemOwnerImage")
-fun ImageView.setOwnerImage(item: Expense?) {
+@BindingAdapter("expenseItemUserImage")
+fun ImageView.setUserImage(item: ExpenseParticipant?) {
     item?.let {
-        setImageBitmap(item.owner.image)
+        setImageBitmap(item.user.image)
     }
 }
 

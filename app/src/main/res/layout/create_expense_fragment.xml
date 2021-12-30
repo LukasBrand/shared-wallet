@@ -47,8 +47,10 @@
                     android:id="@+id/create_expense_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:autofillHints="name"
                     android:hint="Name"
                     android:minHeight="48dp"
+                    android:text="@={createExpenseViewModel.name}"
                     app:layout_constraintBottom_toTopOf="@+id/create_expense_location"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -58,8 +60,10 @@
                     android:id="@+id/create_expense_location"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:autofillHints="postalAddress"
                     android:hint="Location"
                     android:minHeight="48dp"
+                    android:text="@={createExpenseViewModel.name}"
                     app:layout_constraintBottom_toTopOf="@+id/create_expense_creation_date"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -68,8 +72,8 @@
                 <Button
                     android:id="@+id/create_expense_creation_date"
                     android:layout_width="160dp"
-                    android:layout_height="48dp"
-                    android:text="Creation Date"
+                    android:layout_height="wrap_content"
+                    android:text="@{createExpenseViewModel.creationDate}"
                     app:layout_constraintBottom_toTopOf="@+id/create_expense_price"
                     app:layout_constraintEnd_toStartOf="@+id/create_expense_due_date"
                     app:layout_constraintStart_toStartOf="parent"
@@ -78,8 +82,8 @@
                 <Button
                     android:id="@+id/create_expense_due_date"
                     android:layout_width="178dp"
-                    android:layout_height="48dp"
-                    android:text="Due Date"
+                    android:layout_height="wrap_content"
+                    android:text="@{createExpenseViewModel.dueDate}"
                     app:layout_constraintBottom_toBottomOf="@+id/create_expense_creation_date"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/create_expense_creation_date"
@@ -89,9 +93,11 @@
                     android:id="@+id/create_expense_price"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:autofillHints="number"
                     android:hint="Price"
                     android:inputType="numberDecimal"
                     android:minHeight="48dp"
+                    android:text="@{createExpenseViewModel.expenseAmountString}"
                     app:layout_constraintBottom_toTopOf="@+id/create_expense_add_participants_layout"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -106,11 +112,6 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/create_expense_price">
-
-                    <ImageView
-                        android:id="@+id/create_expense_add_participants_image"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
 
                     <Button
                         android:id="@+id/create_expense_add_participants"

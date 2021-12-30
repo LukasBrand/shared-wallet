@@ -12,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.math.BigDecimal
 import java.util.*
 
 class FirestoreDataSourceTest {
@@ -40,12 +41,10 @@ class FirestoreDataSourceTest {
             "1",
             "TestExpense",
             ownerParticipant,
-            listOf(),
             Location(LocationManager.GPS_PROVIDER),
             Date(),
             Date(),
-            Currency.getInstance(""),
-            listOf(),
+            BigDecimal(""),
             listOf()
         )
 

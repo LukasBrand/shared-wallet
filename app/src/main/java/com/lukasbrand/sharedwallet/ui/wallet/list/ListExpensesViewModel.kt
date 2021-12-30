@@ -1,8 +1,8 @@
 package com.lukasbrand.sharedwallet.ui.wallet.list
 
-import android.app.Application
 import androidx.lifecycle.*
 import com.lukasbrand.sharedwallet.data.Expense
+import com.lukasbrand.sharedwallet.data.ExpenseParticipant
 import com.lukasbrand.sharedwallet.data.User
 import com.lukasbrand.sharedwallet.repository.ExpensesRepository
 import com.lukasbrand.sharedwallet.repository.UsersRepository
@@ -13,8 +13,6 @@ class ListExpensesViewModel(
     private val expensesRepository: ExpensesRepository,
     private val usersRepository: UsersRepository,
 ) : ViewModel() {
-
-
 
 
     private val uiScope = viewModelScope
@@ -32,13 +30,18 @@ class ListExpensesViewModel(
                     ownerUserApiModel.email,
                     ownerUserApiModel.image
                 )
-                val participants = expenseApiModel.participants.map { userId ->
+                val participants = expenseApiModel.participants.mapIndexed { index, userId ->
                     val participant = usersRepository.getUser(userId)
-                    User(
+                    val user = User(
                         participant.id,
                         participant.name,
                         participant.email,
                         participant.image
+                    )
+                    ExpenseParticipant(
+                        user,
+                        expenseApiModel.participantExpensePercentage[index],
+                        expenseApiModel.hasPaid[index]
                     )
                 }
 
@@ -46,13 +49,11 @@ class ListExpensesViewModel(
                     expenseApiModel.id!!,
                     expenseApiModel.name,
                     owner,
-                    participants,
                     expenseApiModel.location,
                     expenseApiModel.creationDate,
                     expenseApiModel.dueDate,
                     expenseApiModel.expenseAmount,
-                    expenseApiModel.participantExpensePercentage,
-                    expenseApiModel.isPaid
+                    participants
                 )
             }
         }.asLiveData())
