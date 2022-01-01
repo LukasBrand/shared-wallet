@@ -51,9 +51,15 @@ class CreateExpenseFragment : Fragment() {
         binding.createExpenseCreationDate.setOnClickListener(this::clickDataPicker)
         binding.createExpenseDueDate.setOnClickListener(this::clickDataPicker)
 
-        val adapter = ParticipantsAdapter(ParticipantItemListener { participantId: String ->
-            //TODO: add liveData to items inside participants list
-        })
+        val adapter = ParticipantsAdapter(
+            ParticipantItemListener(onPaidListener = {
+                TODO()
+            }, onPercentageChangedListener = {
+                TODO()
+            }, onParticipantRemoveListener = {
+                TODO()
+            })
+        )
         binding.createExpenseParticipants.adapter = adapter
 
         viewModel.participants.observe(viewLifecycleOwner, { listOfParticipants ->

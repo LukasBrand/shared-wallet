@@ -1,7 +1,9 @@
 package com.lukasbrand.sharedwallet.ui.wallet.create.participant
 
 import android.content.res.Resources
+import android.widget.CheckBox
 import android.widget.ImageView
+import android.widget.SeekBar
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.lukasbrand.sharedwallet.R
@@ -10,35 +12,37 @@ import com.lukasbrand.sharedwallet.data.ExpenseParticipant
 import java.util.*
 
 
-@BindingAdapter("expenseItemUserImage")
-fun ImageView.setUserImage(item: ExpenseParticipant?) {
+@BindingAdapter("participantItemImage")
+fun ImageView.setParticipantImage(item: ExpenseParticipant?) {
     item?.let {
         setImageBitmap(item.user.image)
     }
 }
 
-@BindingAdapter("expenseItemCreateInfo")
-fun TextView.setCreateInfo(item: Expense?) {
+@BindingAdapter("participantItemName")
+fun TextView.setParticipantName(item: ExpenseParticipant?) {
     item?.let {
-        text = convertTimestampToFormatted(item.creationDate, context.resources)
+        text = item.user.name
     }
 }
 
-@BindingAdapter("expenseItemEndInfo")
-fun TextView.setEndInfo(item: Expense?) {
+@BindingAdapter("participantItemPercentageShow")
+fun TextView.setParticipantPercentage(item: ExpenseParticipant?) {
     item?.let {
-        text = convertTimestampToFormatted(item.dueDate, context.resources)
+        text = context.getString(R.string.participant_percentage, item.expensePercentage)
     }
 }
 
-@BindingAdapter("expenseItemCountInfo")
-fun TextView.setPaidCountInfo(item: Expense?) {
+@BindingAdapter("participantItemHasPaid")
+fun CheckBox.setParticipantHasPaid(item: ExpenseParticipant?) {
     item?.let {
-        text = context.getString(R.string.expense_item_paid_count, item.participants.stream().filter { it.hasPaid }.count(), item.participants.size)
+        isChecked = item.hasPaid
     }
 }
 
-
-private fun convertTimestampToFormatted(time: Date, resources: Resources?): CharSequence? {
-    TODO("Not yet implemented")
+@BindingAdapter("participantItemPercentage")
+fun SeekBar.setPercentage(item: ExpenseParticipant?) {
+    item?.let {
+        progress = item.expensePercentage
+    }
 }

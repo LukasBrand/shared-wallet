@@ -17,5 +17,6 @@
     <string name="list_expense_menu_search_expense">Search</string>
     <string name="sign_in_with_google">Sign in with Google</string>
     <string name="sign_in_with_github">Sign in with Github</string>
+    <string name="participant_percentage">%1$d\%</string>
 
 </resources>

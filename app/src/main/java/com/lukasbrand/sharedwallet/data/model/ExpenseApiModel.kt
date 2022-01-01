@@ -13,7 +13,7 @@ data class ExpenseApiModel(
     val dueDate: Date,
     val expenseAmount: BigDecimal,
     val participants: List<String>,
-    val participantExpensePercentage: List<Double>,
+    val participantExpensePercentage: List<Int>,
     val hasPaid: List<Boolean>,
     //val isArchived: Boolean
 )

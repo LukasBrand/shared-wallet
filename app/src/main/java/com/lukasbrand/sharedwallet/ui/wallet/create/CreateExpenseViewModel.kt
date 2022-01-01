@@ -3,6 +3,7 @@ package com.lukasbrand.sharedwallet.ui.wallet.create
 import android.location.Location
 import androidx.lifecycle.*
 import com.lukasbrand.sharedwallet.data.ExpenseParticipant
+import com.lukasbrand.sharedwallet.data.User
 import com.lukasbrand.sharedwallet.data.model.ExpenseApiModel
 import com.lukasbrand.sharedwallet.repository.ExpensesRepository
 import com.lukasbrand.sharedwallet.repository.UsersRepository
@@ -47,7 +48,11 @@ class CreateExpenseViewModel(
 
     val expenseAmountString: MutableLiveData<String> = MutableLiveData("0.00")
 
-    val participants: MutableLiveData<List<ExpenseParticipant>> = MutableLiveData()
+    val participants: MutableLiveData<MutableList<ExpenseParticipant>> = MutableLiveData()
+
+    fun addParticipant(user: User) {
+        participants.value?.add(ExpenseParticipant(user, 0, false))
+    }
 
     fun createExpense() {
         viewModelScope.launch {

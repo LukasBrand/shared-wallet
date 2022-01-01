@@ -15,9 +15,6 @@ import com.lukasbrand.sharedwallet.datasource.AuthenticationRemoteDataSource
 import com.lukasbrand.sharedwallet.datasource.firestore.FirebaseAuthApi
 import com.lukasbrand.sharedwallet.repository.AuthenticationRepository
 import kotlinx.coroutines.Dispatchers
-import nl.hiddewieringa.money.asCurrency
-import javax.money.Monetary
-import javax.money.MonetaryAmount
 
 class CreateAccountFragment : Fragment() {
 
