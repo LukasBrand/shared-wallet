@@ -1,10 +1,12 @@
 package com.lukasbrand.sharedwallet.ui.wallet.create
 
 import android.location.Location
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.*
 import com.lukasbrand.sharedwallet.data.ExpenseParticipant
 import com.lukasbrand.sharedwallet.data.User
 import com.lukasbrand.sharedwallet.data.model.ExpenseApiModel
+import com.lukasbrand.sharedwallet.data.model.UserApiModel
 import com.lukasbrand.sharedwallet.repository.ExpensesRepository
 import com.lukasbrand.sharedwallet.repository.UsersRepository
 import kotlinx.coroutines.launch
@@ -73,4 +75,17 @@ class CreateExpenseViewModel(
     }
 
 
+    val email: MutableLiveData<String> = MutableLiveData()
+
+    private val _user: MutableLiveData<UserApiModel> = MutableLiveData(null)
+    val user: UserApiModel
+        get() = _user.value!!
+    val userExists: LiveData<Boolean>
+        get() = liveData { _user.value != null }
+
+    fun searchForUser(email: String) {
+        viewModelScope.launch {
+            _user.value = usersRepository.getUserIdFromEmail(email)
+        }
+    }
 }

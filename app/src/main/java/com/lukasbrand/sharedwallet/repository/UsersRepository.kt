@@ -17,7 +17,7 @@ class UsersRepository(private val usersRemoteDataSource: UsersRemoteDataSource) 
     suspend fun removeUser(userApiModel: UserApiModel): Unit =
         usersRemoteDataSource.removeUser(userApiModel)
 
-    suspend fun getUserIdFromEmail(email: String): String =
+    suspend fun getUserIdFromEmail(email: String): UserApiModel? =
         usersRemoteDataSource.getUserIdFromEmail(email)
 
     suspend fun getUser(userId: String): UserApiModel =

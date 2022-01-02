@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.lukasbrand.sharedwallet.R
+import com.lukasbrand.sharedwallet.data.User
 import com.lukasbrand.sharedwallet.databinding.CreateExpenseFragmentBinding
 import com.lukasbrand.sharedwallet.datasource.ExpensesRemoteDataSource
 import com.lukasbrand.sharedwallet.datasource.UsersRemoteDataSource
@@ -15,8 +16,6 @@ import com.lukasbrand.sharedwallet.datasource.firestore.FirestoreApi
 import com.lukasbrand.sharedwallet.repository.ExpensesRepository
 import com.lukasbrand.sharedwallet.repository.UsersRepository
 import com.lukasbrand.sharedwallet.ui.wallet.create.participant.ParticipantItemListener
-import com.lukasbrand.sharedwallet.ui.wallet.list.ExpensesAdapter
-import com.lukasbrand.sharedwallet.ui.wallet.list.item.ExpenseItemListener
 import kotlinx.coroutines.Dispatchers
 import java.time.LocalDate
 import java.util.*
@@ -65,6 +64,21 @@ class CreateExpenseFragment : Fragment() {
         viewModel.participants.observe(viewLifecycleOwner, { listOfParticipants ->
             adapter.submitList(listOfParticipants)
         })
+
+        viewModel.email.observe(viewLifecycleOwner, viewModel::searchForUser)
+
+        binding.createExpenseAddParticipants.setOnClickListener {
+            viewModel.addParticipant(
+                User(
+                    viewModel.user.id,
+                    viewModel.user.name,
+                    viewModel.user.email,
+                    viewModel.user.image
+                )
+            )
+            TODO("Bad Code. Leave model data classes in data layer")
+        }
+
 
         return binding.root
     }

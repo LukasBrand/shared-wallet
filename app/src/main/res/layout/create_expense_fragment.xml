@@ -105,19 +105,30 @@
 
                 <LinearLayout
                     android:id="@+id/create_expense_add_participants_layout"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    android:orientation="vertical"
                     app:layout_constraintBottom_toTopOf="@+id/create_expense_participants"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/create_expense_price">
 
+                    <EditText
+                        android:id="@+id/email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:autofillHints="emailAddress"
+                        android:hint="@string/prompt_email"
+                        android:inputType="textEmailAddress"
+                        android:text="@={createExpenseViewModel.email}" />
+
                     <Button
                         android:id="@+id/create_expense_add_participants"
                         android:layout_width="wrap_content"
-
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:enabled="@{createExpenseViewModel.userExists}"
                         android:text="Add Participant" />
                 </LinearLayout>
 

@@ -140,22 +140,22 @@ class FirestoreApi(private val firebaseFirestore: FirebaseFirestore) {
     }
 
 
-    suspend fun getUserIdFromEmail(email: String): String =
+    suspend fun getUserIdFromEmail(email: String): UserApiModel? =
         suspendCancellableCoroutine { continuation ->
             val getUserRef =
                 firebaseFirestore.collection(USER_COLLECTION).whereEqualTo("email", email)
             getUserRef.get()
                 .addOnSuccessListener { value ->
-                    val user = value.toObjects(UserApiModel::class.java).first()
-                    if (user != null) {
-                        continuation.resume(user.id)
-                    }
+                    val user = value.toObjects(UserApiModel::class.java).firstOrNull()
+
+                    continuation.resume(user)
+
                 }.addOnFailureListener { exception ->
                     continuation.resumeWithException(exception)
                 }
         }
 
-    suspend fun getUser(userId: String) : UserApiModel =
+    suspend fun getUser(userId: String): UserApiModel =
         suspendCancellableCoroutine { continuation ->
             val getUserRef =
                 firebaseFirestore.collection(USER_COLLECTION).whereEqualTo("id", userId)
