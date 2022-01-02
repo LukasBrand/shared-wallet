@@ -1,7 +1,6 @@
 package com.lukasbrand.sharedwallet.ui.wallet.create
 
 import android.location.Location
-import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.*
 import com.lukasbrand.sharedwallet.data.ExpenseParticipant
 import com.lukasbrand.sharedwallet.data.User
@@ -9,13 +8,16 @@ import com.lukasbrand.sharedwallet.data.model.ExpenseApiModel
 import com.lukasbrand.sharedwallet.data.model.UserApiModel
 import com.lukasbrand.sharedwallet.repository.ExpensesRepository
 import com.lukasbrand.sharedwallet.repository.UsersRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
+import javax.inject.Inject
 
-class CreateExpenseViewModel(
+@HiltViewModel
+class CreateExpenseViewModel @Inject constructor(
     private val expensesRepository: ExpensesRepository,
     private val usersRepository: UsersRepository
 ) : ViewModel() {

@@ -7,10 +7,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lukasbrand.sharedwallet.data.User
 import com.lukasbrand.sharedwallet.repository.AuthenticationRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class CreateAccountViewModel(private val authenticationRepository: AuthenticationRepository) :
-    ViewModel() {
+@HiltViewModel
+class CreateAccountViewModel @Inject constructor(
+    private val authenticationRepository: AuthenticationRepository
+) : ViewModel() {
 
     private val _onAccountCreated: MutableLiveData<User> = MutableLiveData()
     val onAccountCreated: LiveData<User>

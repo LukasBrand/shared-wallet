@@ -5,24 +5,21 @@ import android.os.Bundle
 import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.lukasbrand.sharedwallet.R
 import com.lukasbrand.sharedwallet.data.User
 import com.lukasbrand.sharedwallet.databinding.CreateExpenseFragmentBinding
-import com.lukasbrand.sharedwallet.datasource.ExpensesRemoteDataSource
-import com.lukasbrand.sharedwallet.datasource.UsersRemoteDataSource
-import com.lukasbrand.sharedwallet.datasource.firestore.FirestoreApi
-import com.lukasbrand.sharedwallet.repository.ExpensesRepository
-import com.lukasbrand.sharedwallet.repository.UsersRepository
 import com.lukasbrand.sharedwallet.ui.wallet.create.participant.ParticipantItemListener
-import kotlinx.coroutines.Dispatchers
+import com.lukasbrand.sharedwallet.ui.wallet.create.participant.ParticipantsAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import java.util.*
 
+@AndroidEntryPoint
 class CreateExpenseFragment : Fragment() {
 
-    private lateinit var viewModel: CreateExpenseViewModel
+    private val viewModel : CreateExpenseViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,19 +31,7 @@ class CreateExpenseFragment : Fragment() {
             DataBindingUtil.inflate(inflater, R.layout.create_expense_fragment, container, false)
 
         binding.lifecycleOwner = viewLifecycleOwner
-
-        val firestoreApi = FirestoreApi.getInstance()
-        val expensesRemoteDataSource = ExpensesRemoteDataSource(firestoreApi, Dispatchers.IO)
-        val usersRemoteDataSource = UsersRemoteDataSource(firestoreApi, Dispatchers.IO)
-        val expensesRepository = ExpensesRepository(expensesRemoteDataSource)
-        val usersRepository = UsersRepository(usersRemoteDataSource)
-
-        val viewModelFactory = CreateExpenseViewModelFactory(expensesRepository, usersRepository)
-
-        viewModel = ViewModelProvider(this, viewModelFactory)[CreateExpenseViewModel::class.java]
-
         binding.createExpenseViewModel = viewModel
-
         binding.createExpenseCreationDate.setOnClickListener(this::clickDataPicker)
         binding.createExpenseDueDate.setOnClickListener(this::clickDataPicker)
 
@@ -78,7 +63,6 @@ class CreateExpenseFragment : Fragment() {
             )
             TODO("Bad Code. Leave model data classes in data layer")
         }
-
 
         return binding.root
     }

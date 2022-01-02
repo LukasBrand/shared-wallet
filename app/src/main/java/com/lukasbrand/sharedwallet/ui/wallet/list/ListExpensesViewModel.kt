@@ -6,14 +6,16 @@ import com.lukasbrand.sharedwallet.data.ExpenseParticipant
 import com.lukasbrand.sharedwallet.data.User
 import com.lukasbrand.sharedwallet.repository.ExpensesRepository
 import com.lukasbrand.sharedwallet.repository.UsersRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class ListExpensesViewModel(
+@HiltViewModel
+class ListExpensesViewModel @Inject constructor(
     private val expensesRepository: ExpensesRepository,
     private val usersRepository: UsersRepository,
 ) : ViewModel() {
-
 
     private val uiScope = viewModelScope
 

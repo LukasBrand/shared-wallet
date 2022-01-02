@@ -1,4 +1,4 @@
-package com.lukasbrand.sharedwallet.ui.wallet.list
+package com.lukasbrand.sharedwallet.ui.wallet.list.item
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter

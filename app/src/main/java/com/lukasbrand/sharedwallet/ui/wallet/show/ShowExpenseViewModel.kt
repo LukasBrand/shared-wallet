@@ -1,22 +1,24 @@
 package com.lukasbrand.sharedwallet.ui.wallet.show
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
+import androidx.lifecycle.*
 import com.lukasbrand.sharedwallet.data.Expense
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class ShowExpenseViewModel(private val expenseId: String) : ViewModel() {
+@HiltViewModel
+class ShowExpenseViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle
+) : ViewModel() {
+
+    val expenseId: String = savedStateHandle["expenseId"]!!
 
     private val expense = MediatorLiveData<Expense>()
 
     fun getExpense() = expense
 
     init {
-    //Get expense from database and use it as live data
-    //expense.addSource()
+        //Get expense from database and use it as live data
+        //expense.addSource()
     }
 
     private val _navigateToListExpenses = MutableLiveData<Boolean?>()
