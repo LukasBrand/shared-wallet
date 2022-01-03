@@ -21,8 +21,8 @@ class ShowExpenseViewModel @Inject constructor(
         //expense.addSource()
     }
 
-    private val _navigateToListExpenses = MutableLiveData<Boolean?>()
 
+    private val _navigateToListExpenses = MutableLiveData<Boolean?>()
     val navigateToListExpenses: LiveData<Boolean?>
         get() = _navigateToListExpenses
 

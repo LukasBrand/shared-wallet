@@ -26,6 +26,7 @@ class ListExpensesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         setHasOptionsMenu(true)
+        requireActivity().title = getString(R.string.list_expense_title)
 
         val binding: ListExpensesFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.list_expenses_fragment, container, false)
@@ -34,6 +35,15 @@ class ListExpensesFragment : Fragment() {
         val adapter = ExpensesAdapter(ExpenseItemListener { expenseId: String ->
             viewModel.onExpenseItemClicked(expenseId)
         })
+        binding.listOfExpenses.adapter = adapter
+
+        viewModel.userId.observe(viewLifecycleOwner) { userId ->
+            if (userId == null) {
+                this.findNavController().navigate(
+                    ListExpensesFragmentDirections.actionListExpensesFragmentToTitleFragment()
+                )
+            }
+        }
 
         viewModel.navigateToExpenseDetail.observe(viewLifecycleOwner, { expenseId ->
             expenseId?.let {
@@ -44,7 +54,6 @@ class ListExpensesFragment : Fragment() {
                 viewModel.onExpenseItemNavigated()
             }
         })
-        binding.listOfExpenses.adapter = adapter
 
         viewModel.expenses.observe(viewLifecycleOwner, { listOfExpenses ->
             adapter.submitList(listOfExpenses)

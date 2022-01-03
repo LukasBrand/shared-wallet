@@ -5,7 +5,7 @@ import androidx.lifecycle.*
 import com.lukasbrand.sharedwallet.data.ExpenseParticipant
 import com.lukasbrand.sharedwallet.data.User
 import com.lukasbrand.sharedwallet.data.model.ExpenseApiModel
-import com.lukasbrand.sharedwallet.data.model.UserApiModel
+import com.lukasbrand.sharedwallet.repository.AuthenticationRepository
 import com.lukasbrand.sharedwallet.repository.ExpensesRepository
 import com.lukasbrand.sharedwallet.repository.UsersRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,33 +18,40 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CreateExpenseViewModel @Inject constructor(
+    private val authenticationRepository: AuthenticationRepository,
     private val expensesRepository: ExpensesRepository,
     private val usersRepository: UsersRepository
 ) : ViewModel() {
 
-    val owner = "" //TODO
+    private val owner = liveData {
+        emit(authenticationRepository.handleAuthentication().getOrThrow())
+    }
 
     val name: MutableLiveData<String> = MutableLiveData("")
 
     val location: MutableLiveData<Location> = MutableLiveData()
 
-    private val _creationDate: MutableLiveData<LocalDate> = MutableLiveData(LocalDate.now())
-    val creationDate: LiveData<String>
-        get() = _creationDate.map {
+    private val _creationDate: MutableLiveData<LocalDate> = MutableLiveData()
+    val creationDate: LiveData<String> = liveData {
+        emit("Creation Date")
+        emitSource(_creationDate.map {
             val formatter = DateTimeFormatter.ofPattern("dd-MMMM-yyyy")
             it.format(formatter)
-        }
+        })
+    }
 
     fun setCreationDate(date: LocalDate) {
         _creationDate.value = date
     }
 
-    private val _dueDate: MutableLiveData<LocalDate> = MutableLiveData(LocalDate.now())
-    val dueDate: LiveData<String>
-        get() = _dueDate.map {
+    private val _dueDate: MutableLiveData<LocalDate> = MutableLiveData()
+    val dueDate: LiveData<String> = liveData {
+        emit("Due Date")
+        emitSource(_dueDate.map {
             val formatter = DateTimeFormatter.ofPattern("dd-MMMM-yyyy")
             it.format(formatter)
-        }
+        })
+    }
 
     fun setDueDate(date: LocalDate) {
         _dueDate.value = date
@@ -52,18 +59,12 @@ class CreateExpenseViewModel @Inject constructor(
 
     val expenseAmountString: MutableLiveData<String> = MutableLiveData("0.00")
 
-    val participants: MutableLiveData<MutableList<ExpenseParticipant>> = MutableLiveData()
-
-    fun addParticipant(user: User) {
-        participants.value?.add(ExpenseParticipant(user, 0, false))
-    }
-
     fun createExpense() {
         viewModelScope.launch {
             val expenseApiModel = ExpenseApiModel(
                 null,
                 name.value!!,
-                owner,
+                owner.value!!,
                 location.value!!,
                 Date(_creationDate.value!!.toEpochDay()),
                 Date(_dueDate.value!!.toEpochDay()),
@@ -77,17 +78,45 @@ class CreateExpenseViewModel @Inject constructor(
     }
 
 
+    private val _participants: MutableLiveData<MutableList<ExpenseParticipant>> =
+        MutableLiveData(mutableListOf())
+
+    val participants: LiveData<List<ExpenseParticipant>>
+        get() = _participants.map { it as List<ExpenseParticipant> }
+
+    fun addParticipant() {
+        _participants.value!!.add(ExpenseParticipant(user, 0, false))
+    }
+
+    fun removeParticipant(participantId: String) {
+        _participants.value!!.removeIf {
+            it.user.id == participantId
+        }
+    }
+
     val email: MutableLiveData<String> = MutableLiveData()
 
-    private val _user: MutableLiveData<UserApiModel> = MutableLiveData(null)
-    val user: UserApiModel
+    private val _user: MutableLiveData<User> = MutableLiveData(null)
+    val user: User
         get() = _user.value!!
     val userExists: LiveData<Boolean>
-        get() = liveData { _user.value != null }
+        get() = liveData {
+            emitSource(_user.map { user ->
+                user != null
+            })
+        }
 
     fun searchForUser(email: String) {
         viewModelScope.launch {
             _user.value = usersRepository.getUserIdFromEmail(email)
         }
+    }
+
+    fun participantHasPaid(participantId: String, paid: Boolean) {
+        TODO("Not yet implemented")
+    }
+
+    fun participantPercentage(participantId: String, percent: Int) {
+        TODO("Not yet implemented")
     }
 }

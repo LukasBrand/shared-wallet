@@ -3,11 +3,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/create_expense"
-        android:title="Create"
+        android:id="@+id/cancel_create_expense"
+        android:title="Cancel"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/abort_create_expense"
-        android:title="Abort"
+        android:id="@+id/create_expense"
+        android:title="Create"
         app:showAsAction="ifRoom" />
 </menu>

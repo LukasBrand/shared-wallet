@@ -6,6 +6,7 @@ plugins {
     id("com.google.gms.google-services")
     id("de.mannodermaus.android-junit5")
     id("dagger.hilt.android.plugin")
+    id ("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
@@ -65,8 +66,10 @@ kapt {
 }
 
 dependencies {
-    implementation("com.google.dagger:hilt-android:2.38.1")
-    kapt("com.google.dagger:hilt-android-compiler:2.38.1")
+    implementation("com.google.dagger:hilt-android:2.40.5")
+    kapt("com.google.dagger:hilt-android-compiler:2.40.5")
+
+    api("com.google.maps.android:places-ktx:1.0.0")
 
     implementation("androidx.core:core-ktx:1.7.0")
     implementation("androidx.appcompat:appcompat:1.4.0")
@@ -81,6 +84,13 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0")
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
+
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+
+    implementation("com.google.android.gms:play-services-maps:18.0.1")
+    implementation("com.google.android.gms:play-services-location:19.0.0")
+    implementation("com.google.android.libraries.places:places:2.5.0")
+
 
     implementation("com.google.android.gms:play-services-auth:20.0.0")
     implementation(platform("com.google.firebase:firebase-bom:29.0.3"))

@@ -147,9 +147,7 @@ class FirestoreApi(private val firebaseFirestore: FirebaseFirestore) {
             getUserRef.get()
                 .addOnSuccessListener { value ->
                     val user = value.toObjects(UserApiModel::class.java).firstOrNull()
-
                     continuation.resume(user)
-
                 }.addOnFailureListener { exception ->
                     continuation.resumeWithException(exception)
                 }
@@ -162,9 +160,7 @@ class FirestoreApi(private val firebaseFirestore: FirebaseFirestore) {
             getUserRef.get()
                 .addOnSuccessListener { value ->
                     val user = value.toObjects(UserApiModel::class.java).first()
-                    if (user != null) {
-                        continuation.resume(user)
-                    }
+                    continuation.resume(user)
                 }.addOnFailureListener { exception ->
                     continuation.resumeWithException(exception)
                 }

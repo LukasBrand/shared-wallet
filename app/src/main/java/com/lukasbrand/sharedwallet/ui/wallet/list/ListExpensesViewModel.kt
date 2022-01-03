@@ -4,6 +4,8 @@ import androidx.lifecycle.*
 import com.lukasbrand.sharedwallet.data.Expense
 import com.lukasbrand.sharedwallet.data.ExpenseParticipant
 import com.lukasbrand.sharedwallet.data.User
+import com.lukasbrand.sharedwallet.exception.NotLoggedInException
+import com.lukasbrand.sharedwallet.repository.AuthenticationRepository
 import com.lukasbrand.sharedwallet.repository.ExpensesRepository
 import com.lukasbrand.sharedwallet.repository.UsersRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,35 +15,31 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ListExpensesViewModel @Inject constructor(
+    private val authenticationRepository: AuthenticationRepository,
     private val expensesRepository: ExpensesRepository,
     private val usersRepository: UsersRepository,
 ) : ViewModel() {
 
-    private val uiScope = viewModelScope
-
-    val authId = ""
+    val userId: LiveData<String?> = liveData {
+        emit(
+            try {
+                authenticationRepository.handleAuthentication().getOrNull()
+            } catch (e: NotLoggedInException) {
+                null
+            }
+        )
+    }
 
     @ExperimentalCoroutinesApi
     val expenses: LiveData<List<Expense>> = liveData {
-        emitSource(expensesRepository.getExpenses(authId).map { listOfExpenseApiModel ->
+        if (userId.value == null) return@liveData
+        emitSource(expensesRepository.getExpenses(userId.value!!).map { listOfExpenseApiModel ->
             listOfExpenseApiModel.map { expenseApiModel ->
-                val ownerUserApiModel = usersRepository.getUser(expenseApiModel.owner)
-                val owner = User(
-                    ownerUserApiModel.id,
-                    ownerUserApiModel.name,
-                    ownerUserApiModel.email,
-                    ownerUserApiModel.image
-                )
+                val owner = usersRepository.getUser(expenseApiModel.owner)
                 val participants = expenseApiModel.participants.mapIndexed { index, userId ->
                     val participant = usersRepository.getUser(userId)
-                    val user = User(
-                        participant.id,
-                        participant.name,
-                        participant.email,
-                        participant.image
-                    )
                     ExpenseParticipant(
-                        user,
+                        participant,
                         expenseApiModel.participantExpensePercentage[index],
                         expenseApiModel.hasPaid[index]
                     )

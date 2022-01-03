@@ -7,8 +7,11 @@ import android.util.Patterns
 import com.lukasbrand.sharedwallet.repository.AuthenticationRepository
 
 import com.lukasbrand.sharedwallet.R
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class LoginViewModel(private val authenticationRepository: AuthenticationRepository) : ViewModel() {
+@HiltViewModel
+class LoginViewModel @Inject constructor(private val authenticationRepository: AuthenticationRepository) : ViewModel() {
 
     private val _loginForm = MutableLiveData<LoginFormState>()
     val loginFormState: LiveData<LoginFormState> = _loginForm

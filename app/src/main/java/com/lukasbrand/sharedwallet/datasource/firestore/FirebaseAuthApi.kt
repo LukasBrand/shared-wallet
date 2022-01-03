@@ -1,9 +1,11 @@
 package com.lukasbrand.sharedwallet.datasource.firestore
 
 import com.google.firebase.auth.FirebaseAuth
+import com.lukasbrand.sharedwallet.exception.NotLoggedInException
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 class FirebaseAuthApi(private val firebaseAuth: FirebaseAuth) {
 
@@ -34,6 +36,8 @@ class FirebaseAuthApi(private val firebaseAuth: FirebaseAuth) {
                 continuation.resume(Result.success(result.user!!.uid))
             }.addOnFailureListener { exception ->
                 continuation.resumeWithException(exception)
+            }.addOnCanceledListener {
+                continuation.cancel()
             }
     }
 
@@ -46,11 +50,45 @@ class FirebaseAuthApi(private val firebaseAuth: FirebaseAuth) {
                 continuation.resume(Result.success(result.user!!.uid))
             }.addOnFailureListener { exception ->
                 continuation.resumeWithException(exception)
+            }.addOnCanceledListener {
+                continuation.cancel()
             }
     }
 
-    suspend fun signOut(): Unit = suspendCancellableCoroutine {
+    suspend fun signOut(): Unit = suspendCancellableCoroutine { continuation ->
         firebaseAuth.signOut()
-        it.resume(Unit)
+        continuation.resume(Unit)
+    }
+
+    suspend fun getAuthStatus(): Boolean = suspendCancellableCoroutine { continuation ->
+        val currentUser = firebaseAuth.currentUser
+
+        if (currentUser != null) {
+            currentUser.reload()
+                /* This is currently bugged
+                .addOnSuccessListener {
+                    continuation.resume(true)
+                */
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        continuation.resume(true)
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    continuation.resume(false)
+                }.addOnCanceledListener {
+                    continuation.cancel()
+                }
+        } else {
+            continuation.resume(false)
+        }
+    }
+
+    suspend fun getUserId(): String = suspendCoroutine { continuation ->
+        if (firebaseAuth.currentUser == null) {
+            continuation.resumeWithException(NotLoggedInException())
+        } else {
+            continuation.resume(firebaseAuth.currentUser!!.uid)
+        }
     }
 }
