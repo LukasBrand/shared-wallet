@@ -30,35 +30,41 @@ class ListExpensesFragment : Fragment() {
 
         val binding: ListExpensesFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.list_expenses_fragment, container, false)
-        binding.lifecycleOwner = viewLifecycleOwner
 
         val adapter = ExpensesAdapter(ExpenseItemListener { expenseId: String ->
             viewModel.onExpenseItemClicked(expenseId)
         })
-        binding.listOfExpenses.adapter = adapter
 
-        viewModel.userId.observe(viewLifecycleOwner) { userId ->
-            if (userId == null) {
-                this.findNavController().navigate(
-                    ListExpensesFragmentDirections.actionListExpensesFragmentToTitleFragment()
-                )
+        binding.apply {
+            lifecycleOwner = viewLifecycleOwner
+            listOfExpenses.adapter = adapter
+            listExpensesCreateExpense.setOnClickListener {
+                findNavController().navigate(ListExpensesFragmentDirections.actionListExpensesFragmentToCreateExpenseFragment())
             }
         }
 
-        viewModel.navigateToExpenseDetail.observe(viewLifecycleOwner, { expenseId ->
-            expenseId?.let {
-                this.findNavController().navigate(
-                    ListExpensesFragmentDirections
-                        .actionListExpensesFragmentToShowExpenseFragment(expenseId)
-                )
-                viewModel.onExpenseItemNavigated()
+        viewModel.apply {
+            userId.observe(viewLifecycleOwner) { userId ->
+                if (userId == null) {
+                    findNavController().navigate(
+                        ListExpensesFragmentDirections.actionListExpensesFragmentToTitleFragment()
+                    )
+                }
             }
-        })
+            navigateToExpenseDetail.observe(viewLifecycleOwner, { expenseId ->
+                expenseId?.let {
+                    findNavController().navigate(
+                        ListExpensesFragmentDirections
+                            .actionListExpensesFragmentToShowExpenseFragment(expenseId)
+                    )
+                    viewModel.onExpenseItemNavigated()
+                }
+            })
 
-        viewModel.expenses.observe(viewLifecycleOwner, { listOfExpenses ->
-            adapter.submitList(listOfExpenses)
-        })
-
+            expenses.observe(viewLifecycleOwner, { listOfExpenses ->
+                adapter.submitList(listOfExpenses)
+            })
+        }
         return binding.root
     }
 

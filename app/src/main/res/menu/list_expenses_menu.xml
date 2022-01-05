@@ -1,15 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/createExpenseFragment"
-        android:icon="@drawable/ic_baseline_add_24"
-        android:title="@string/list_expense_menu_add_expense"
-        app:showAsAction="ifRoom" />
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity">
+
     <item
         android:id="@+id/search_expense"
         android:icon="@drawable/ic_search_black_24dp"
         android:title="@string/list_expense_menu_search_expense"
         app:actionViewClass="android.widget.SearchView"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/overflow_menu"
+        android:icon="@drawable/ic_baseline_more_vert_24"
+        android:title=""
+        app:showAsAction="always">
+
+        <menu>
+            <item
+                android:id="@+id/show_account"
+                android:icon="@drawable/ic_baseline_account_circle_24"
+                android:title="@string/list_expense_menu_show_account"
+                app:iconTint="@color/black"
+                app:showAsAction="ifRoom" />
+
+            <item
+                android:id="@+id/log_out_account"
+                android:icon="@drawable/ic_baseline_login_24"
+                android:title="@string/list_expense_menu_log_out"
+                app:iconTint="@color/black"
+                app:showAsAction="ifRoom" />
+        </menu>
+    </item>
+
+
 </menu>

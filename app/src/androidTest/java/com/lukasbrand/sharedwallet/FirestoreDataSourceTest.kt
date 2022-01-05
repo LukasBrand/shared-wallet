@@ -3,6 +3,7 @@ package com.lukasbrand.sharedwallet
 import android.location.Location
 import android.location.LocationManager
 import androidx.test.platform.app.InstrumentationRegistry
+import com.google.type.LatLng
 import com.lukasbrand.sharedwallet.data.Expense
 import com.lukasbrand.sharedwallet.data.User
 import com.lukasbrand.sharedwallet.datasource.ExpensesRemoteDataSource
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
+import java.time.LocalDateTime
 import java.util.*
 
 class FirestoreDataSourceTest {
@@ -41,9 +43,9 @@ class FirestoreDataSourceTest {
             "1",
             "TestExpense",
             ownerParticipant,
-            Location(LocationManager.GPS_PROVIDER),
-            Date(),
-            Date(),
+            LatLng.getDefaultInstance(),
+            LocalDateTime.now(),
+            LocalDateTime.now(),
             BigDecimal(""),
             listOf()
         )

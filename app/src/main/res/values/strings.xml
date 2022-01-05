@@ -22,4 +22,6 @@
     <string name="cancel">Cancel</string>
     <string name="create_expense_title">Create new Expense</string>
     <string name="list_expense_title">Expenses</string>
+    <string name="list_expense_menu_show_account">Show Account</string>
+    <string name="list_expense_menu_log_out">Log Out</string>
 </resources>

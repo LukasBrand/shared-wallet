@@ -1,9 +1,9 @@
 package com.lukasbrand.sharedwallet.ui.wallet.list
 
 import androidx.lifecycle.*
+import com.google.type.LatLng
 import com.lukasbrand.sharedwallet.data.Expense
 import com.lukasbrand.sharedwallet.data.ExpenseParticipant
-import com.lukasbrand.sharedwallet.data.User
 import com.lukasbrand.sharedwallet.exception.NotLoggedInException
 import com.lukasbrand.sharedwallet.repository.AuthenticationRepository
 import com.lukasbrand.sharedwallet.repository.ExpensesRepository
@@ -11,6 +11,7 @@ import com.lukasbrand.sharedwallet.repository.UsersRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.map
+import java.time.ZoneId
 import javax.inject.Inject
 
 @HiltViewModel
@@ -41,7 +42,8 @@ class ListExpensesViewModel @Inject constructor(
                     ExpenseParticipant(
                         participant,
                         expenseApiModel.participantExpensePercentage[index],
-                        expenseApiModel.hasPaid[index]
+                        expenseApiModel.hasPaid[index],
+                        participant.id == owner.id
                     )
                 }
 
@@ -49,9 +51,14 @@ class ListExpensesViewModel @Inject constructor(
                     expenseApiModel.id!!,
                     expenseApiModel.name,
                     owner,
-                    expenseApiModel.location,
-                    expenseApiModel.creationDate,
-                    expenseApiModel.dueDate,
+                    LatLng.newBuilder().setLatitude(expenseApiModel.location.latitude)
+                        .setLongitude(expenseApiModel.location.longitude).build(),
+                    expenseApiModel.creationDate.toDate().toInstant()
+                        .atZone(ZoneId.systemDefault())
+                        .toLocalDateTime(),
+                    expenseApiModel.dueDate.toDate().toInstant()
+                        .atZone(ZoneId.systemDefault())
+                        .toLocalDateTime(),
                     expenseApiModel.expenseAmount,
                     participants
                 )

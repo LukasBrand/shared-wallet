@@ -1,6 +1,8 @@
 package com.lukasbrand.sharedwallet.datasource.firestore
 
+import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import com.lukasbrand.sharedwallet.data.model.ExpenseApiModel
 import com.lukasbrand.sharedwallet.data.model.UserApiModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -89,10 +91,16 @@ class FirestoreApi(private val firebaseFirestore: FirebaseFirestore) {
 
     suspend fun addUser(userApiModel: UserApiModel): Unit =
         suspendCancellableCoroutine { continuation ->
-            firebaseFirestore.collection(USER_COLLECTION).add(userApiModel)
-                .addOnSuccessListener {
+            firebaseFirestore.collection(USER_COLLECTION).document(userApiModel.id).set(userApiModel)
+                /*.addOnSuccessListener {
                     continuation.resume(Unit)
-                }.addOnFailureListener { exception ->
+                }*/
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        continuation.resume(Unit)
+                    }
+                }
+                .addOnFailureListener { exception ->
                     continuation.resumeWithException(exception)
                 }
         }
@@ -125,7 +133,7 @@ class FirestoreApi(private val firebaseFirestore: FirebaseFirestore) {
     @ExperimentalCoroutinesApi
     fun getUsers(userIds: Array<out String>): Flow<List<UserApiModel>> = callbackFlow {
         val userQuery =
-            firebaseFirestore.collection(USER_COLLECTION).whereIn("id", mutableListOf(userIds))
+            firebaseFirestore.collection(USER_COLLECTION).whereIn(FieldPath.documentId(), mutableListOf(userIds))
 
         val snapshotListener = userQuery.addSnapshotListener { value, _ ->
             if (value != null) {
@@ -156,7 +164,7 @@ class FirestoreApi(private val firebaseFirestore: FirebaseFirestore) {
     suspend fun getUser(userId: String): UserApiModel =
         suspendCancellableCoroutine { continuation ->
             val getUserRef =
-                firebaseFirestore.collection(USER_COLLECTION).whereEqualTo("id", userId)
+                firebaseFirestore.collection(USER_COLLECTION).whereEqualTo(FieldPath.documentId(), userId)
             getUserRef.get()
                 .addOnSuccessListener { value ->
                     val user = value.toObjects(UserApiModel::class.java).first()
@@ -164,5 +172,6 @@ class FirestoreApi(private val firebaseFirestore: FirebaseFirestore) {
                 }.addOnFailureListener { exception ->
                     continuation.resumeWithException(exception)
                 }
+            FieldPath.documentId()
         }
 }

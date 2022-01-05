@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="2dp"
             android:text="@{createExpenseViewModel.creationDate}"
-            app:layout_constraintBottom_toTopOf="@+id/create_expense_price"
+            app:layout_constraintBottom_toTopOf="@+id/create_expense_price_custom"
             app:layout_constraintEnd_toStartOf="@+id/create_expense_due_date"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/create_expense_location" />
@@ -68,19 +68,59 @@
             app:layout_constraintStart_toEndOf="@+id/create_expense_creation_date"
             app:layout_constraintTop_toTopOf="@+id/create_expense_creation_date" />
 
-        <EditText
-            android:id="@+id/create_expense_price"
-            android:layout_width="match_parent"
+
+        <Button
+            android:id="@+id/create_expense_price_small"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:autofillHints="number"
-            android:hint="Price"
-            android:inputType="numberDecimal"
-            android:minHeight="48dp"
-            android:text="@{createExpenseViewModel.expenseAmountString}"
+            android:onClick='@{() -> createExpenseViewModel.setPrice("10")}'
+            android:text="10€"
+            android:layout_marginRight="2dp"
             app:layout_constraintBottom_toTopOf="@+id/create_expense_add_participants_layout"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/create_expense_price_middle"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/create_expense_creation_date" />
+
+        <Button
+            android:id="@+id/create_expense_price_middle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:onClick='@{() -> createExpenseViewModel.setPrice("20")}'
+            android:layout_marginHorizontal="2dp"
+            android:text="20€"
+            app:layout_constraintBottom_toBottomOf="@+id/create_expense_price_small"
+            app:layout_constraintEnd_toStartOf="@+id/create_expense_price_high"
+            app:layout_constraintStart_toEndOf="@id/create_expense_price_small"
+            app:layout_constraintTop_toTopOf="@+id/create_expense_price_small" />
+
+        <Button
+            android:id="@+id/create_expense_price_high"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="2dp"
+            android:onClick='@{() -> createExpenseViewModel.setPrice("50")}'
+            android:text="50€"
+            app:layout_constraintBottom_toBottomOf="@+id/create_expense_price_small"
+            app:layout_constraintEnd_toStartOf="@id/create_expense_price_custom"
+            app:layout_constraintStart_toEndOf="@id/create_expense_price_middle"
+            app:layout_constraintTop_toTopOf="@+id/create_expense_price_small" />
+
+        <EditText
+            android:id="@+id/create_expense_price_custom"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{createExpenseViewModel.priceAsString}"
+            android:afterTextChanged="@{(value) -> createExpenseViewModel.setPrice(value.toString())}"
+            android:autofillHints="number"
+            android:hint="Price"
+            android:layout_marginLeft="2dp"
+            android:inputType="numberDecimal"
+            android:minHeight="48dp"
+            app:layout_constraintBottom_toBottomOf="@+id/create_expense_price_small"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/create_expense_price_high"
+            app:layout_constraintTop_toTopOf="@+id/create_expense_price_small" />
+
 
         <LinearLayout
             android:id="@+id/create_expense_add_participants_layout"
@@ -90,7 +130,7 @@
             app:layout_constraintBottom_toTopOf="@+id/create_expense_participants"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/create_expense_price">
+            app:layout_constraintTop_toBottomOf="@+id/create_expense_price_small">
 
             <EditText
                 android:id="@+id/email"

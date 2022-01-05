@@ -6,7 +6,7 @@ plugins {
     id("com.google.gms.google-services")
     id("de.mannodermaus.android-junit5")
     id("dagger.hilt.android.plugin")
-    id ("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
@@ -51,6 +51,8 @@ android {
         // 2) Connect JUnit 5 to the runner
         testInstrumentationRunnerArguments["runnerBuilder"] =
             "de.mannodermaus.junit5.AndroidJUnit5Builder"
+        testInstrumentationRunnerArguments["configurationParameters"] =
+            "junit.jupiter.extensions.autodetection.enabled=true"
     }
 
     junitPlatform {
@@ -100,9 +102,11 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.2")
 
+    androidTestImplementation("androidx.test:core-ktx:1.4.0")
     androidTestImplementation("androidx.test:runner:1.4.0")
     androidTestImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
     androidTestImplementation("de.mannodermaus.junit5:android-test-core:1.3.0")
+    androidTestRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.2")
     androidTestRuntimeOnly("de.mannodermaus.junit5:android-test-runner:1.3.0")
     //androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
     androidTestImplementation("androidx.navigation:navigation-testing:2.3.5")

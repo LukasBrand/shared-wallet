@@ -36,8 +36,3 @@ fun TextView.setPaidCountInfo(item: Expense?) {
         text = context.getString(R.string.expense_item_paid_count, item.participants.stream().filter { it.hasPaid }.count(), item.participants.size)
     }
 }
-
-
-private fun convertTimestampToFormatted(time: Date, resources: Resources?): CharSequence? {
-    TODO("Not yet implemented")
-}

@@ -14,6 +14,7 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
+import com.google.type.LatLng
 import com.lukasbrand.sharedwallet.R
 import com.lukasbrand.sharedwallet.databinding.CreateExpenseFragmentBinding
 import com.lukasbrand.sharedwallet.ui.wallet.create.participant.ParticipantItemListener
@@ -21,6 +22,7 @@ import com.lukasbrand.sharedwallet.ui.wallet.create.participant.ParticipantsAdap
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import java.util.*
+import com.google.android.gms.maps.model.LatLng as MapsLatLng
 
 @AndroidEntryPoint
 class CreateExpenseFragment : Fragment() {
@@ -37,11 +39,6 @@ class CreateExpenseFragment : Fragment() {
         val binding: CreateExpenseFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.create_expense_fragment, container, false)
 
-        binding.lifecycleOwner = viewLifecycleOwner
-        binding.createExpenseViewModel = viewModel
-        binding.createExpenseCreationDate.setOnClickListener(this::clickDataPicker)
-        binding.createExpenseDueDate.setOnClickListener(this::clickDataPicker)
-
         val adapter = ParticipantsAdapter(
             ParticipantItemListener(onPaidListener = { participantId, isPaid ->
                 viewModel.participantHasPaid(participantId, isPaid)
@@ -51,31 +48,36 @@ class CreateExpenseFragment : Fragment() {
                 viewModel.removeParticipant(participantId)
             })
         )
-        binding.createExpenseParticipants.adapter = adapter
 
-        viewModel.participants.observe(viewLifecycleOwner, { listOfParticipants ->
-            adapter.submitList(listOfParticipants)
-        })
-
-        viewModel.email.observe(viewLifecycleOwner, viewModel::searchForUser)
-
-        binding.createExpenseAddParticipants.setOnClickListener {
-            viewModel.addParticipant()
+        viewModel.apply {
+            participants.observe(viewLifecycleOwner, { listOfParticipants ->
+                adapter.submitList(listOfParticipants)
+            })
+            viewModel.email.observe(viewLifecycleOwner, viewModel::searchForUser)
         }
 
-        binding.createExpenseLocation.setOnClickListener {
-            // Set the fields to specify which types of place data to
-            // return after the user has made a selection.
-            val fields = listOf(Place.Field.ID, Place.Field.NAME)
+        binding.apply {
+            lifecycleOwner = viewLifecycleOwner
+            createExpenseViewModel = viewModel
+            createExpenseParticipants.adapter = adapter
+            createExpenseCreationDate.setOnClickListener(this@CreateExpenseFragment::clickDataPicker)
+            createExpenseDueDate.setOnClickListener(this@CreateExpenseFragment::clickDataPicker)
 
-            // Start the autocomplete intent.
-            val intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
-                .build(requireContext())
+            createExpenseAddParticipants.setOnClickListener {
+                viewModel.addParticipant()
+            }
 
-            startForResult.launch(intent)
+            createExpenseLocation.setOnClickListener {
+                // Set the fields to specify which types of place data to return after the user has made a selection.
+                val fields = listOf(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG)
+
+                val intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
+                    .setInitialQuery(viewModel.locationQuery.value)
+                    .build(requireContext())
+
+                startForResult.launch(intent)
+            }
         }
-
-
         return binding.root
     }
 
@@ -86,7 +88,7 @@ class CreateExpenseFragment : Fragment() {
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
         val datePickerDialog = DatePickerDialog(
-            this.requireContext(),
+            requireContext(),
             { _, selectedYear, selectedMonth, selectedDay ->
                 val date = LocalDate.of(selectedYear, selectedMonth + 1, selectedDay)
                 when (view.id) {
@@ -101,22 +103,27 @@ class CreateExpenseFragment : Fragment() {
         datePickerDialog.show()
     }
 
-    //Location activity
+    //Location activity registration
     private val startForResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             when (result.resultCode) {
                 Activity.RESULT_OK -> {
-                    result.data?.let {
-                        val place = Autocomplete.getPlaceFromIntent(it)
-                        Toast.makeText(
-                            requireContext(),
-                            "Got place '${place.name}'",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                    result.data?.let { intent ->
+                        val place = Autocomplete.getPlaceFromIntent(intent)
+                        place.name?.let { name ->
+                            viewModel.setLocationQuery(name)
+                        }
+                        place.latLng?.let { mapsLatLng: MapsLatLng ->
+                            val latLng = LatLng.newBuilder()
+                                .setLatitude(mapsLatLng.latitude)
+                                .setLongitude(mapsLatLng.longitude)
+                                .build()
+                            viewModel.setLocation(latLng)
+                        }
+
                     }
                 }
                 AutocompleteActivity.RESULT_ERROR -> {
-                    // TODO: Handle the error.
                     result.data?.let {
                         val status = Autocomplete.getStatusFromIntent(it)
                         Toast.makeText(
@@ -133,13 +140,13 @@ class CreateExpenseFragment : Fragment() {
 
         }
 
+
     //Options menu integration:
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.create_expense_menu, menu)
     }
 
-    //TODO: bind actions to menu elements
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.create_expense -> {

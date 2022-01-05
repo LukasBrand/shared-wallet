@@ -1,5 +1,6 @@
 package com.lukasbrand.sharedwallet.repository
 
+import com.lukasbrand.sharedwallet.data.Result
 import com.lukasbrand.sharedwallet.data.User
 import com.lukasbrand.sharedwallet.data.model.UserApiModel
 import com.lukasbrand.sharedwallet.datasource.UsersRemoteDataSource
@@ -24,9 +25,15 @@ class UsersRepository(private val usersRemoteDataSource: UsersRemoteDataSource) 
         usersRemoteDataSource.removeUser(userApiModel)
     }
 
-    suspend fun getUserIdFromEmail(email: String): User? {
-        return usersRemoteDataSource.getUserIdFromEmail(email)?.run {
-            User(id, name, email, image)
+    suspend fun getUserFromEmail(email: String): Result<User> {
+        return usersRemoteDataSource.getUserIdFromEmail(email).let { userApiModel ->
+            if (userApiModel == null) {
+                Result.Error(NullPointerException())
+            } else {
+                val user =
+                    User(userApiModel.id, userApiModel.name, userApiModel.email, userApiModel.image)
+                com.lukasbrand.sharedwallet.data.Result.Success(user)
+            }
         }
     }
 
