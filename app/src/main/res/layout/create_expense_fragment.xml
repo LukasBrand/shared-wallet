@@ -26,7 +26,7 @@
             android:autofillHints="name"
             android:hint="Name"
             android:minHeight="48dp"
-            android:text="@={createExpenseViewModel.name}"
+            app:expenseNameInfo="@{createExpenseViewModel.expense}"
             app:layout_constraintBottom_toTopOf="@+id/create_expense_location"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -51,7 +51,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="2dp"
-            android:text="@{createExpenseViewModel.creationDate}"
+            app:expenseCreationDateInfo="@{createExpenseViewModel.expense}"
             app:layout_constraintBottom_toTopOf="@+id/create_expense_price_custom"
             app:layout_constraintEnd_toStartOf="@+id/create_expense_due_date"
             app:layout_constraintStart_toStartOf="parent"
@@ -62,7 +62,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="2dp"
-            android:text="@{createExpenseViewModel.dueDate}"
+            app:expenseDueDateInfo="@{createExpenseViewModel.expense}"
             app:layout_constraintBottom_toBottomOf="@+id/create_expense_creation_date"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/create_expense_creation_date"
@@ -73,9 +73,8 @@
             android:id="@+id/create_expense_price_small"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:onClick='@{() -> createExpenseViewModel.setPrice("10")}'
-            android:text="10€"
             android:layout_marginRight="2dp"
+            android:text="10€"
             app:layout_constraintBottom_toTopOf="@+id/create_expense_add_participants_layout"
             app:layout_constraintEnd_toStartOf="@+id/create_expense_price_middle"
             app:layout_constraintStart_toStartOf="parent"
@@ -85,7 +84,6 @@
             android:id="@+id/create_expense_price_middle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:onClick='@{() -> createExpenseViewModel.setPrice("20")}'
             android:layout_marginHorizontal="2dp"
             android:text="20€"
             app:layout_constraintBottom_toBottomOf="@+id/create_expense_price_small"
@@ -98,7 +96,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="2dp"
-            android:onClick='@{() -> createExpenseViewModel.setPrice("50")}'
             android:text="50€"
             app:layout_constraintBottom_toBottomOf="@+id/create_expense_price_small"
             app:layout_constraintEnd_toStartOf="@id/create_expense_price_custom"
@@ -109,13 +106,12 @@
             android:id="@+id/create_expense_price_custom"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@{createExpenseViewModel.priceAsString}"
-            android:afterTextChanged="@{(value) -> createExpenseViewModel.setPrice(value.toString())}"
+            android:layout_marginLeft="2dp"
             android:autofillHints="number"
             android:hint="Price"
-            android:layout_marginLeft="2dp"
             android:inputType="numberDecimal"
             android:minHeight="48dp"
+            app:expenseCustomPriceInfo="@{createExpenseViewModel.expense}"
             app:layout_constraintBottom_toBottomOf="@+id/create_expense_price_small"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/create_expense_price_high"
@@ -133,14 +129,14 @@
             app:layout_constraintTop_toBottomOf="@+id/create_expense_price_small">
 
             <EditText
-                android:id="@+id/email"
+                android:id="@+id/create_expense_potential_participant_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:autofillHints="emailAddress"
                 android:hint="@string/prompt_email"
                 android:inputType="textEmailAddress"
-                android:text="@={createExpenseViewModel.email}" />
+                android:text="@{createExpenseViewModel.participantEmail}" />
 
             <Button
                 android:id="@+id/create_expense_add_participants"
@@ -148,8 +144,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="4dp"
-                android:enabled="@{createExpenseViewModel.userExists}"
-                android:text="Add Participant" />
+                android:text="Add Participant"
+                app:expenseValidParticipantInfo="@{createExpenseViewModel.potentialParticipant}" />
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView

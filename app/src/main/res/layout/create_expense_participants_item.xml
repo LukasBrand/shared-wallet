@@ -91,7 +91,7 @@
             app:layout_constraintTop_toTopOf="@id/percentage_show"
             app:participantItemHasPaid="@{participant}" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <ImageButton
             android:id="@+id/remove_participant"
             android:layout_width="48dp"
             android:layout_height="48dp"
