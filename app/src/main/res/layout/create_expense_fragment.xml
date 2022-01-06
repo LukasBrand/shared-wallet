@@ -26,7 +26,7 @@
             android:autofillHints="name"
             android:hint="Name"
             android:minHeight="48dp"
-            app:expenseNameInfo="@{createExpenseViewModel.expense}"
+            android:text='@{createExpenseViewModel.name}'
             app:layout_constraintBottom_toTopOf="@+id/create_expense_location"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -111,7 +111,7 @@
             android:hint="Price"
             android:inputType="numberDecimal"
             android:minHeight="48dp"
-            app:expenseCustomPriceInfo="@{createExpenseViewModel.expense}"
+            android:text="@{createExpenseViewModel.expenseAmount}"
             app:layout_constraintBottom_toBottomOf="@+id/create_expense_price_small"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/create_expense_price_high"

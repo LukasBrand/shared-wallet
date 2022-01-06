@@ -25,17 +25,17 @@ class UsersRepository(private val usersRemoteDataSource: UsersRemoteDataSource) 
         usersRemoteDataSource.removeUser(userApiModel)
     }
 
-    suspend fun getUserFromEmail(email: String): Result<User> {
-        return usersRemoteDataSource.getUserIdFromEmail(email).let { userApiModel ->
+    suspend fun getUserFromEmail(email: String): Result<User> =
+        usersRemoteDataSource.getUserIdFromEmail(email).let { userApiModel ->
             if (userApiModel == null) {
                 Result.Error(NullPointerException())
             } else {
                 val user =
                     User(userApiModel.id, userApiModel.name, userApiModel.email, userApiModel.image)
-                com.lukasbrand.sharedwallet.data.Result.Success(user)
+                Result.Success(user)
             }
         }
-    }
+
 
     suspend fun getUser(userId: String): User =
         usersRemoteDataSource.getUser(userId).run {

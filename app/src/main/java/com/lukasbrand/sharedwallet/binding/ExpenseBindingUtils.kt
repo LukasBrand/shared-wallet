@@ -5,12 +5,10 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
-import androidx.databinding.InverseBindingAdapter
-import com.lukasbrand.sharedwallet.data.Expense
 import com.lukasbrand.sharedwallet.data.ExpenseParticipant
+import com.lukasbrand.sharedwallet.data.NewExpense
 import com.lukasbrand.sharedwallet.data.Result
 import com.lukasbrand.sharedwallet.exhaustive
-import com.lukasbrand.sharedwallet.ui.wallet.create.CreateExpenseViewModel
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -19,38 +17,30 @@ fun convertTimestampToFormatted(time: LocalDateTime, resources: Resources): Char
     return time.format(formatter)
 }
 
-@BindingAdapter("expenseNameInfo")
-fun EditText.setNameInfo(expense: Result<Expense>) {
-    val name: String = when (expense) {
-        is Result.Success -> expense.data.name
-        else -> ""
-    }.exhaustive
-    setText(name)
-}
-
 @BindingAdapter("expenseCreationDateInfo")
-fun TextView.setCreationDateInfo(expense: Result<Expense>) {
+fun TextView.setCreationDateInfo(expense: Result<NewExpense>) {
     text = when (expense) {
-        is Result.Success -> convertTimestampToFormatted(
-            expense.data.creationDate,
-            context.resources
-        )
+        is Result.Success -> expense.data.creationDate?.let {
+            convertTimestampToFormatted(it, context.resources)
+        } ?: "Creation Date"
         else -> ""
     }.exhaustive
 }
 
 @BindingAdapter("expenseDueDateInfo")
-fun TextView.setDueDateInfo(expense: Result<Expense>) {
+fun TextView.setDueDateInfo(expense: Result<NewExpense>) {
     text = when (expense) {
-        is Result.Success -> convertTimestampToFormatted(expense.data.dueDate, context.resources)
+        is Result.Success -> expense.data.dueDate?.let {
+            convertTimestampToFormatted(it, context.resources)
+        } ?: "Due Date"
         else -> ""
     }.exhaustive
 }
 
 @BindingAdapter("expenseCustomPriceInfo")
-fun EditText.setCustomPriceInfo(expense: Result<Expense>) {
+fun EditText.setCustomPriceInfo(expense: Result<NewExpense>) {
     val price: String = when (expense) {
-        is Result.Success -> expense.data.expenseAmount.toPlainString()
+        is Result.Success -> expense.data.expenseAmount?.toPlainString() ?: ""
         else -> ""
     }.exhaustive
     setText(price)

@@ -9,11 +9,11 @@ import java.util.*
 data class Expense(
     val id: String = "",
     val name: String = "",
-    val owner: User = User("", "", "", null),
+    val owner: User,
     val location: LatLng = LatLng.getDefaultInstance(),
     val creationDate: LocalDateTime = LocalDateTime.now(),
     val dueDate: LocalDateTime = LocalDateTime.now(),
     val expenseAmount: BigDecimal = BigDecimal("0"),
-    val participants: List<ExpenseParticipant> = listOf(),
+    val participants: List<ExpenseParticipant>,
     //val isArchived: Boolean
 )

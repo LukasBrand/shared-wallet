@@ -29,7 +29,7 @@ fun TextView.setParticipantName(item: ExpenseParticipant?) {
 @BindingAdapter("participantItemPercentageShow")
 fun TextView.setParticipantPercentage(item: ExpenseParticipant?) {
     item?.let {
-        text = context.getString(R.string.participant_percentage, item.expensePercentage)
+        text = item.expensePercentage.toString()
     }
 }
 

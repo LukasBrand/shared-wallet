@@ -68,7 +68,10 @@ class CreateExpenseFragment : Fragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.expense.collect { expenseResult ->
                     when (expenseResult) {
-                        is Result.Success -> adapter.submitList(expenseResult.data.participants)
+                        is Result.Success -> {
+                            adapter.submitList(expenseResult.data.participants)
+                            println("updated expense")
+                        }
                         is Result.Error -> {}
                         Result.Loading -> {}
                     }.exhaustive
@@ -93,7 +96,6 @@ class CreateExpenseFragment : Fragment() {
             createExpenseViewModel = viewModel
             createExpenseParticipants.adapter = adapter
 
-            //The following could be created as inverse bindings
             createExpenseName.doOnTextChanged { text, _, _, _ ->
                 text?.let {
                     viewModel.setName(it.toString())
