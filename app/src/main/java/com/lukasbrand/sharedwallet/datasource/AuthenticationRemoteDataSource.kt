@@ -3,17 +3,18 @@ package com.lukasbrand.sharedwallet.datasource
 import com.lukasbrand.sharedwallet.datasource.firestore.FirebaseAuthApi
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
+import com.lukasbrand.sharedwallet.types.Result
 
 class AuthenticationRemoteDataSource(
     private val firestoreAuthApi: FirebaseAuthApi,
     private val ioDispatcher: CoroutineDispatcher
 ) {
-    suspend fun createAccountWithEmailAndPassword(email: String, password: String): Result<String> =
+    suspend fun createAccountWithEmailAndPassword(email: String, password: String): String =
         withContext(ioDispatcher) {
             firestoreAuthApi.createAccountWithEmailAndPassword(email, password)
         }
 
-    suspend fun signInWithEmailAndPassword(email: String, password: String): Result<String> =
+    suspend fun signInWithEmailAndPassword(email: String, password: String): String =
         withContext(ioDispatcher) {
             firestoreAuthApi.signInWithEmailAndPassword(email, password)
         }

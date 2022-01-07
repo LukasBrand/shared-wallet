@@ -22,13 +22,13 @@ class LoginViewModel @Inject constructor(private val authenticationRepository: A
     suspend fun login(username: String, password: String) {
         // can be launched in a separate asynchronous job
         val result = authenticationRepository.signInWithEmailAndPassword(username, password)
-
+/*
         if (result.isSuccess) {
             _loginResult.value =
                 LoginResult(success = LoggedInUserView(displayName = ""))
         } else {
             _loginResult.value = LoginResult(error = R.string.login_failed)
-        }
+        }*/
     }
 
     fun loginDataChanged(username: String, password: String) {

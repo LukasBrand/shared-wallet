@@ -2,7 +2,6 @@ package com.lukasbrand.sharedwallet.datasource.firestore
 
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.SetOptions
 import com.lukasbrand.sharedwallet.data.model.ExpenseApiModel
 import com.lukasbrand.sharedwallet.data.model.UserApiModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -71,14 +70,18 @@ class FirestoreApi(private val firebaseFirestore: FirebaseFirestore) {
 
     //maybe needs to be suspended
     @ExperimentalCoroutinesApi
-    fun getExpenses(authId: String): Flow<List<ExpenseApiModel>> = callbackFlow {
+    suspend fun getExpenses(authId: String): Flow<List<ExpenseApiModel>> = callbackFlow {
         val expensesQuery =
             firebaseFirestore.collection(EXPENSE_COLLECTION)
                 .whereArrayContains("participants", authId)
 
         val snapshotListener = expensesQuery.addSnapshotListener { value, _ ->
             if (value != null) {
-                val expenses: List<ExpenseApiModel> = value.toObjects(ExpenseApiModel::class.java)
+                val expenses: List<ExpenseApiModel> = value.documents
+                    .mapNotNull { documentSnapshot ->
+                        documentSnapshot.toObject(ExpenseApiModel::class.java)
+                            ?.copy(id = documentSnapshot.id)
+                    }
                 trySend(expenses)
             }
         }
@@ -91,7 +94,8 @@ class FirestoreApi(private val firebaseFirestore: FirebaseFirestore) {
 
     suspend fun addUser(userApiModel: UserApiModel): Unit =
         suspendCancellableCoroutine { continuation ->
-            firebaseFirestore.collection(USER_COLLECTION).document(userApiModel.id).set(userApiModel)
+            firebaseFirestore.collection(USER_COLLECTION).document(userApiModel.id)
+                .set(userApiModel)
                 /*.addOnSuccessListener {
                     continuation.resume(Unit)
                 }*/
@@ -133,7 +137,8 @@ class FirestoreApi(private val firebaseFirestore: FirebaseFirestore) {
     @ExperimentalCoroutinesApi
     fun getUsers(userIds: Array<out String>): Flow<List<UserApiModel>> = callbackFlow {
         val userQuery =
-            firebaseFirestore.collection(USER_COLLECTION).whereIn(FieldPath.documentId(), mutableListOf(userIds))
+            firebaseFirestore.collection(USER_COLLECTION)
+                .whereIn(FieldPath.documentId(), mutableListOf(userIds))
 
         val snapshotListener = userQuery.addSnapshotListener { value, _ ->
             if (value != null) {
@@ -164,7 +169,8 @@ class FirestoreApi(private val firebaseFirestore: FirebaseFirestore) {
     suspend fun getUser(userId: String): UserApiModel =
         suspendCancellableCoroutine { continuation ->
             val getUserRef =
-                firebaseFirestore.collection(USER_COLLECTION).whereEqualTo(FieldPath.documentId(), userId)
+                firebaseFirestore.collection(USER_COLLECTION)
+                    .whereEqualTo(FieldPath.documentId(), userId)
             getUserRef.get()
                 .addOnSuccessListener { value ->
                     val user = value.toObjects(UserApiModel::class.java).first()

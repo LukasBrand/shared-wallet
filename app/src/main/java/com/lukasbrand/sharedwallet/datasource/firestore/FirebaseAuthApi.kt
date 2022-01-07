@@ -6,6 +6,7 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
+import com.lukasbrand.sharedwallet.types.Result
 
 class FirebaseAuthApi(private val firebaseAuth: FirebaseAuth) {
 
@@ -30,10 +31,10 @@ class FirebaseAuthApi(private val firebaseAuth: FirebaseAuth) {
     suspend fun createAccountWithEmailAndPassword(
         email: String,
         password: String
-    ): Result<String> = suspendCancellableCoroutine { continuation ->
+    ): String = suspendCancellableCoroutine { continuation ->
         firebaseAuth.createUserWithEmailAndPassword(email, password)
             .addOnSuccessListener { result ->
-                continuation.resume(Result.success(result.user!!.uid))
+                continuation.resume(result.user!!.uid)
             }.addOnFailureListener { exception ->
                 continuation.resumeWithException(exception)
             }.addOnCanceledListener {
@@ -44,10 +45,10 @@ class FirebaseAuthApi(private val firebaseAuth: FirebaseAuth) {
     suspend fun signInWithEmailAndPassword(
         email: String,
         password: String
-    ): Result<String> = suspendCancellableCoroutine { continuation ->
+    ): String = suspendCancellableCoroutine { continuation ->
         firebaseAuth.signInWithEmailAndPassword(email, password)
             .addOnSuccessListener { result ->
-                continuation.resume(Result.success(result.user!!.uid))
+                continuation.resume(result.user!!.uid)
             }.addOnFailureListener { exception ->
                 continuation.resumeWithException(exception)
             }.addOnCanceledListener {

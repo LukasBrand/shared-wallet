@@ -1,4 +1,4 @@
-package com.lukasbrand.sharedwallet.data
+package com.lukasbrand.sharedwallet.types
 
 sealed class Navigator<out T : Any> {
     data class Navigate<out T : Any>(val data: T) : Navigator<T>()

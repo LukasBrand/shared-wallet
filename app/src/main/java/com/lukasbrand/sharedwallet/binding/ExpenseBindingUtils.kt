@@ -1,4 +1,4 @@
-package com.lukasbrand.sharedwallet.ui.wallet.list.item
+package com.lukasbrand.sharedwallet.binding
 
 import android.content.res.Resources
 import android.widget.Button
@@ -6,44 +6,45 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.lukasbrand.sharedwallet.data.ExpenseParticipant
-import com.lukasbrand.sharedwallet.data.NewExpense
-import com.lukasbrand.sharedwallet.data.Result
 import com.lukasbrand.sharedwallet.exhaustive
+import com.lukasbrand.sharedwallet.types.Result
+import com.lukasbrand.sharedwallet.types.UiState
+import java.math.BigDecimal
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-fun convertTimestampToFormatted(time: LocalDateTime, resources: Resources): CharSequence {
+private fun convertTimestampToFormatted(time: LocalDateTime, resources: Resources): CharSequence {
     val formatter = DateTimeFormatter.ofPattern("dd-MMMM-yyyy")
     return time.format(formatter)
 }
 
+@BindingAdapter("expensePotentialEmailInfo")
+fun TextView.setPotentialEmail(email: UiState<String>) {
+    text = when (email) {
+        is UiState.Set -> email.data
+        UiState.Unset -> ""
+    }.exhaustive
+}
+
 @BindingAdapter("expenseCreationDateInfo")
-fun TextView.setCreationDateInfo(expense: Result<NewExpense>) {
-    text = when (expense) {
-        is Result.Success -> expense.data.creationDate?.let {
-            convertTimestampToFormatted(it, context.resources)
-        } ?: "Creation Date"
-        else -> ""
+fun TextView.setCreationDateInfo(creationDate: UiState<LocalDateTime>) {
+    text = when (creationDate) {
+        is UiState.Set -> convertTimestampToFormatted(creationDate.data, context.resources)
+        UiState.Unset -> "Creation Date"
     }.exhaustive
 }
 
 @BindingAdapter("expenseDueDateInfo")
-fun TextView.setDueDateInfo(expense: Result<NewExpense>) {
-    text = when (expense) {
-        is Result.Success -> expense.data.dueDate?.let {
-            convertTimestampToFormatted(it, context.resources)
-        } ?: "Due Date"
-        else -> ""
+fun TextView.setDueDateInfo(dueDate: UiState<LocalDateTime>) {
+    text = when (dueDate) {
+        is UiState.Set -> convertTimestampToFormatted(dueDate.data, context.resources)
+        UiState.Unset -> "Due Date"
     }.exhaustive
 }
 
 @BindingAdapter("expenseCustomPriceInfo")
-fun EditText.setCustomPriceInfo(expense: Result<NewExpense>) {
-    val price: String = when (expense) {
-        is Result.Success -> expense.data.expenseAmount?.toPlainString() ?: ""
-        else -> ""
-    }.exhaustive
-    setText(price)
+fun EditText.setCustomPriceInfo(expenseAmount: String) {
+    setText(expenseAmount)
 }
 
 @BindingAdapter("expenseValidParticipantInfo")

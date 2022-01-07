@@ -1,4 +1,4 @@
-package com.lukasbrand.sharedwallet.data
+package com.lukasbrand.sharedwallet.types
 
 sealed class Result<out T : Any> {
     data class Success<out T : Any>(val data: T) : Result<T>()

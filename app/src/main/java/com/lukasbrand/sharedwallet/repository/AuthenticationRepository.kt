@@ -9,35 +9,32 @@ class AuthenticationRepository(
     private val authenticationLocalDataSource: AuthenticationLocalDataSource
 ) {
 
-    suspend fun createAccountWithEmailAndPassword(email: String, password: String): Result<String> {
+    suspend fun createAccountWithEmailAndPassword(email: String, password: String): String {
         authenticationLocalDataSource.setUserCredentials(email, password)
         return authenticationRemoteDataSource.createAccountWithEmailAndPassword(email, password)
     }
 
-    suspend fun signInWithEmailAndPassword(email: String, password: String): Result<String> {
+    suspend fun signInWithEmailAndPassword(email: String, password: String): String {
         authenticationLocalDataSource.setUserCredentials(email, password)
         return authenticationRemoteDataSource.signInWithEmailAndPassword(email, password)
     }
 
     suspend fun signOut(): Unit = authenticationRemoteDataSource.signOut()
 
-    suspend fun handleAuthentication(): Result<String> {
+    suspend fun handleAuthentication(): String {
         return if (authenticationRemoteDataSource.getAuthStatus()) {
-            Result.success(authenticationRemoteDataSource.getUserId())
+            authenticationRemoteDataSource.getUserId()
         } else {
             val userCredentials: Pair<String, String>? =
                 authenticationLocalDataSource.getUserCredentials()
             if (userCredentials != null) {
-                try {
-                    authenticationRemoteDataSource.signInWithEmailAndPassword(
-                        userCredentials.first,
-                        userCredentials.second
-                    )
-                } catch (e: Exception) {
-                    Result.failure(e)
-                }
+                authenticationRemoteDataSource.signInWithEmailAndPassword(
+                    userCredentials.first,
+                    userCredentials.second
+                )
+
             } else {
-                Result.failure(NotLoggedInException())
+                throw NotLoggedInException()
             }
         }
     }

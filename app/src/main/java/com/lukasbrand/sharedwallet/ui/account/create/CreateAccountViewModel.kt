@@ -29,15 +29,16 @@ class CreateAccountViewModel @Inject constructor(
 
     fun createAccount() {
         viewModelScope.launch {
-            authenticationRepository.createAccountWithEmailAndPassword(
-                email.value!!,
-                password.value!!
-            ).onSuccess { userId ->
-                val user = User(userId, name.value!!, email.value!!, picture.value)
-                usersRepository.addUser(user)
-                _onAccountCreated.value = user
-            }
+            val userId =
+                authenticationRepository.createAccountWithEmailAndPassword(
+                    email.value!!,
+                    password.value!!
+                )
+            val user = User(userId, name.value!!, email.value!!, picture.value)
+            usersRepository.addUser(user)
+            _onAccountCreated.value = user
         }
     }
 }
+
 

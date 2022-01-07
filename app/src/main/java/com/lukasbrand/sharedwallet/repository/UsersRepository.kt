@@ -1,6 +1,6 @@
 package com.lukasbrand.sharedwallet.repository
 
-import com.lukasbrand.sharedwallet.data.Result
+import com.lukasbrand.sharedwallet.types.Result
 import com.lukasbrand.sharedwallet.data.User
 import com.lukasbrand.sharedwallet.data.model.UserApiModel
 import com.lukasbrand.sharedwallet.datasource.UsersRemoteDataSource

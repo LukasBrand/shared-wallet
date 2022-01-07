@@ -4,7 +4,6 @@ import com.google.firebase.Timestamp
 import com.google.firebase.firestore.GeoPoint
 import com.lukasbrand.sharedwallet.data.Expense
 import com.lukasbrand.sharedwallet.data.NewExpense
-import java.math.BigDecimal
 import java.time.ZoneId
 import java.util.*
 
@@ -15,12 +14,26 @@ data class ExpenseApiModel(
     val location: GeoPoint,
     val creationDate: Timestamp,
     val dueDate: Timestamp,
-    val expenseAmount: BigDecimal,
+    val expenseAmount: String,
     val participants: List<String>,
     val participantExpensePercentage: List<Int>,
     val hasPaid: List<Boolean>,
     //val isArchived: Boolean
 ) {
+    //no arg constructor for serialization
+    constructor() : this(
+        null,
+        "",
+        "owner",
+        GeoPoint(0.0, 0.0),
+        Timestamp.now(),
+        Timestamp.now(),
+        "",
+        listOf(),
+        listOf(),
+        listOf()
+    )
+
     constructor(expense: Expense) : this(
         expense.id,
         expense.name,
@@ -28,7 +41,7 @@ data class ExpenseApiModel(
         GeoPoint(expense.location.latitude, expense.location.longitude),
         Timestamp(Date.from(expense.creationDate.atZone(ZoneId.systemDefault()).toInstant())),
         Timestamp(Date.from(expense.dueDate.atZone(ZoneId.systemDefault()).toInstant())),
-        expense.expenseAmount,
+        expense.expenseAmount.toPlainString(),
         expense.participants.map { participant -> participant.user.id },
         expense.participants.map { participant -> participant.expensePercentage },
         expense.participants.map { participant -> participant.hasPaid })
@@ -40,7 +53,7 @@ data class ExpenseApiModel(
         GeoPoint(expense.location!!.latitude, expense.location.longitude),
         Timestamp(Date.from(expense.creationDate!!.atZone(ZoneId.systemDefault()).toInstant())),
         Timestamp(Date.from(expense.dueDate!!.atZone(ZoneId.systemDefault()).toInstant())),
-        expense.expenseAmount!!,
+        expense.expenseAmount!!.toPlainString(),
         expense.participants.map { participant -> participant.user.id },
         expense.participants.map { participant -> participant.expensePercentage },
         expense.participants.map { participant -> participant.hasPaid })
