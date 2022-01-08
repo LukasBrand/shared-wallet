@@ -6,14 +6,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lukasbrand.sharedwallet.data.User
-import com.lukasbrand.sharedwallet.repository.AuthenticationRepository
-import com.lukasbrand.sharedwallet.repository.UsersRepository
+import com.lukasbrand.sharedwallet.data.repository.AuthenticationRepository
+import com.lukasbrand.sharedwallet.data.repository.UsersRepository
+import com.lukasbrand.sharedwallet.services.message.MessageSendService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CreateAccountViewModel @Inject constructor(
+    private val messageSendService: MessageSendService,
     private val authenticationRepository: AuthenticationRepository,
     private val usersRepository: UsersRepository
 ) : ViewModel() {
@@ -34,7 +36,10 @@ class CreateAccountViewModel @Inject constructor(
                     email.value!!,
                     password.value!!
                 )
-            val user = User(userId, name.value!!, email.value!!, picture.value)
+
+            val notificationToken = messageSendService.getToken()
+
+            val user = User(userId, name.value!!, email.value!!, notificationToken, picture.value)
             usersRepository.addUser(user)
             _onAccountCreated.value = user
         }

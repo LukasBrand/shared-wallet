@@ -63,7 +63,7 @@ class CreateExpenseFragment : Fragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
 
                 //This is not clear to me. If two StateFlows are collected inside a single
-                //coroutine launch scope only the first will be evaluated. Could be a bug
+                //coroutine launch scope only the first will be executed. Could be a bug
                 launch {
                     viewModel.participants.collect { participantsUiState ->
                         when (participantsUiState) {

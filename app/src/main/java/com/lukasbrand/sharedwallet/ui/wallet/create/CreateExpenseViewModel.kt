@@ -10,9 +10,9 @@ import com.lukasbrand.sharedwallet.data.User
 import com.lukasbrand.sharedwallet.exception.ExpenseNotCompleteException
 import com.lukasbrand.sharedwallet.exception.ParticipantAlreadyExistsException
 import com.lukasbrand.sharedwallet.exhaustive
-import com.lukasbrand.sharedwallet.repository.AuthenticationRepository
-import com.lukasbrand.sharedwallet.repository.ExpensesRepository
-import com.lukasbrand.sharedwallet.repository.UsersRepository
+import com.lukasbrand.sharedwallet.data.repository.AuthenticationRepository
+import com.lukasbrand.sharedwallet.data.repository.ExpensesRepository
+import com.lukasbrand.sharedwallet.data.repository.UsersRepository
 import com.lukasbrand.sharedwallet.types.Navigator
 import com.lukasbrand.sharedwallet.types.Result
 import com.lukasbrand.sharedwallet.types.UiState
@@ -47,7 +47,9 @@ class CreateExpenseViewModel @Inject constructor(
     //two way binding. Therefore only a public mutable state flow
     val name: MutableStateFlow<UiState<String>> = MutableStateFlow(UiState.Unset)
 
+
     private val _owner: MutableStateFlow<UiState<User>> = MutableStateFlow(UiState.Unset)
+
 
     private val _location: MutableStateFlow<UiState<LatLng>> = MutableStateFlow(UiState.Unset)
     val location: StateFlow<UiState<LatLng>> = _location

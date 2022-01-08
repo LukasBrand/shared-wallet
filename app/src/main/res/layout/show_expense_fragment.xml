@@ -1,23 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="showExpenseViewModel"
             type="com.lukasbrand.sharedwallet.ui.wallet.show.ShowExpenseViewModel" />
 
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.wallet.show.ShowExpenseFragment">
+        android:layout_height="match_parent">
 
-        <TextView
+        <LinearLayout
+            android:id="@+id/show_expense_scroll_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Hello" />
+            android:layout_marginHorizontal="@dimen/fragment_horizontal_margin"
+            android:layout_marginVertical="@dimen/fragment_vertical_margin"
+            android:orientation="vertical"
+            tools:context=".ui.wallet.create.CreateExpenseFragment">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/show_expense_name_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Expanse Name:" />
+
+            <TextView
+                android:id="@+id/show_expense_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoSizeTextType="uniform"
+                android:minHeight="48dp"
+                android:text="@{showExpenseViewModel.name}" />
+
+            <TextView
+                android:id="@+id/show_expense_location_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Expanse Location:" />
+
+            <com.google.android.gms.maps.MapView
+                android:id="@+id/show_expense_location"
+                android:layout_width="match_parent"
+                android:layout_height="200dp" />
+
+            <TextView
+                android:id="@+id/show_creation_date_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Creation Date:" />
+
+            <TextView
+                android:id="@+id/show_expense_creation_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoSizeTextType="uniform"
+                android:minHeight="48dp"
+                android:text="@{showExpenseViewModel.creationDate}" />
+
+            <TextView
+                android:id="@+id/show_due_date_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Due Date:" />
+
+            <TextView
+                android:id="@+id/show_expense_due_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoSizeTextType="uniform"
+                android:minHeight="48dp"
+                android:text="@{showExpenseViewModel.dueDate}" />
+
+            <TextView
+                android:id="@+id/show_expense_expense_amount_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Expense Amount:" />
+
+            <TextView
+                android:id="@+id/show_expense_expense_amount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoSizeTextType="uniform"
+                android:minHeight="48dp"
+                android:text="@{showExpenseViewModel.expenseAmount}" />
+
+            <TextView
+                android:id="@+id/show_expense_participants_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Participants:" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/show_expense_participants"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 </layout>

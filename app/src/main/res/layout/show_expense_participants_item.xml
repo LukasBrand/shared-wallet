@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="participant"
+            type="com.lukasbrand.sharedwallet.data.ExpenseParticipant" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container"
+        app:participantItemOwner="@{participant}"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/show_participant_owner_initials"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="4dp"
+            android:autoSizeTextType="uniform"
+            android:background="@drawable/circle"
+            android:contentDescription="@string/expense_owner_image_description"
+            android:gravity="center_horizontal|center_vertical"
+            app:participantItemInitials="@{participant}"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/expense_name"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.50"
+            />
+
+        <TextView
+            android:id="@+id/expense_name"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:autoSizeTextType="uniform"
+            app:layout_constraintBottom_toTopOf="@+id/has_paid"
+            app:layout_constraintEnd_toStartOf="@id/has_paid"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/show_participant_owner_initials"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            app:participantItemName="@{participant}" />
+
+        <ProgressBar
+            android:id="@+id/percentage_bar"
+            style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Horizontal"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:max="100"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/percentage_show"
+            app:layout_constraintStart_toStartOf="@+id/expense_name"
+            app:layout_constraintTop_toBottomOf="@+id/expense_name"
+            app:participantItemPercentage="@{participant}" />
+
+        <TextView
+            android:id="@+id/percentage_show"
+            android:layout_width="35dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:gravity="center_vertical"
+            app:layout_constraintBottom_toBottomOf="@+id/percentage_bar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/percentage_bar"
+            app:layout_constraintTop_toTopOf="@+id/percentage_bar"
+            app:participantItemPercentageShow="@{participant}" />
+
+        <ImageView
+            android:id="@+id/has_paid"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:text="Paid"
+            app:layout_constraintBottom_toBottomOf="@id/expense_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/expense_name"
+            app:layout_constraintTop_toTopOf="parent"
+            app:participantItemHasPaid="@{participant}" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

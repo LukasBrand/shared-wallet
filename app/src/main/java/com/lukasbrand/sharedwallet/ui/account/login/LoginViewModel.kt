@@ -1,48 +1,60 @@
 package com.lukasbrand.sharedwallet.ui.account.login
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import android.util.Patterns
-import com.lukasbrand.sharedwallet.repository.AuthenticationRepository
-
-import com.lukasbrand.sharedwallet.R
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.lukasbrand.sharedwallet.exhaustive
+import com.lukasbrand.sharedwallet.data.repository.AuthenticationRepository
+import com.lukasbrand.sharedwallet.types.Navigator
+import com.lukasbrand.sharedwallet.types.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(private val authenticationRepository: AuthenticationRepository) : ViewModel() {
+class LoginViewModel @Inject constructor(private val authenticationRepository: AuthenticationRepository) :
+    ViewModel() {
 
-    private val _loginForm = MutableLiveData<LoginFormState>()
-    val loginFormState: LiveData<LoginFormState> = _loginForm
+    val email: MutableStateFlow<UiState<String>> = MutableStateFlow(UiState.Unset)
 
-    private val _loginResult = MutableLiveData<LoginResult>()
-    val loginResult: LiveData<LoginResult> = _loginResult
+    val password: MutableStateFlow<UiState<String>> = MutableStateFlow(UiState.Unset)
 
-    suspend fun login(username: String, password: String) {
-        // can be launched in a separate asynchronous job
-        val result = authenticationRepository.signInWithEmailAndPassword(username, password)
-/*
-        if (result.isSuccess) {
-            _loginResult.value =
-                LoginResult(success = LoggedInUserView(displayName = ""))
-        } else {
-            _loginResult.value = LoginResult(error = R.string.login_failed)
-        }*/
-    }
 
-    fun loginDataChanged(username: String, password: String) {
-        if (!isUserNameValid(username)) {
-            _loginForm.value = LoginFormState(usernameError = R.string.invalid_username)
-        } else if (!isPasswordValid(password)) {
-            _loginForm.value = LoginFormState(passwordError = R.string.invalid_password)
-        } else {
-            _loginForm.value = LoginFormState(isDataValid = true)
+    fun login() {
+        println("TEST")
+        _navigateToListExpenses.value = Navigator.Loading
+        viewModelScope.launch {
+            val email = when (val e = email.value) {
+                is UiState.Set -> e.data
+                UiState.Unset -> {
+                    return@launch
+                }
+            }.exhaustive
+
+            val password = when (val p = password.value) {
+                is UiState.Set -> p.data
+                UiState.Unset -> {
+                    return@launch
+                }
+            }.exhaustive
+
+            println(email)
+            println(password)
+
+            try {
+                authenticationRepository.signInWithEmailAndPassword(email, password)
+                _navigateToListExpenses.value = Navigator.Navigate(Unit)
+            } catch (e: Exception) {
+                _navigateToListExpenses.value = Navigator.Error(e)
+            }
         }
+
     }
 
-    // A placeholder username validation check
-    private fun isUserNameValid(username: String): Boolean {
+
+    private fun isEmailValid(username: String): Boolean {
         return if (username.contains("@")) {
             Patterns.EMAIL_ADDRESS.matcher(username).matches()
         } else {
@@ -50,8 +62,17 @@ class LoginViewModel @Inject constructor(private val authenticationRepository: A
         }
     }
 
-    // A placeholder password validation check
     private fun isPasswordValid(password: String): Boolean {
         return password.length > 5
+    }
+
+
+    private val _navigateToListExpenses: MutableStateFlow<Navigator<Unit>> =
+        MutableStateFlow(Navigator.Stay)
+    val navigateToListExpenses: StateFlow<Navigator<Unit>>
+        get() = _navigateToListExpenses
+
+    fun onLoggedInNavigated() {
+        _navigateToListExpenses.value = Navigator.Stay
     }
 }

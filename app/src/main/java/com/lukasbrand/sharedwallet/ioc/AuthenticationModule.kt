@@ -1,10 +1,10 @@
 package com.lukasbrand.sharedwallet.ioc
 
 import android.content.Context
-import com.lukasbrand.sharedwallet.datasource.AuthenticationLocalDataSource
-import com.lukasbrand.sharedwallet.datasource.AuthenticationRemoteDataSource
-import com.lukasbrand.sharedwallet.datasource.firestore.FirebaseAuthApi
-import com.lukasbrand.sharedwallet.repository.AuthenticationRepository
+import com.lukasbrand.sharedwallet.data.datasource.AuthenticationLocalDataSource
+import com.lukasbrand.sharedwallet.data.datasource.AuthenticationRemoteDataSource
+import com.lukasbrand.sharedwallet.data.datasource.firestore.FirebaseAuthApi
+import com.lukasbrand.sharedwallet.data.repository.AuthenticationRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

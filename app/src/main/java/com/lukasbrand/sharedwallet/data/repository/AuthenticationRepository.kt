@@ -1,7 +1,7 @@
-package com.lukasbrand.sharedwallet.repository
+package com.lukasbrand.sharedwallet.data.repository
 
-import com.lukasbrand.sharedwallet.datasource.AuthenticationLocalDataSource
-import com.lukasbrand.sharedwallet.datasource.AuthenticationRemoteDataSource
+import com.lukasbrand.sharedwallet.data.datasource.AuthenticationLocalDataSource
+import com.lukasbrand.sharedwallet.data.datasource.AuthenticationRemoteDataSource
 import com.lukasbrand.sharedwallet.exception.NotLoggedInException
 
 class AuthenticationRepository(
@@ -19,7 +19,10 @@ class AuthenticationRepository(
         return authenticationRemoteDataSource.signInWithEmailAndPassword(email, password)
     }
 
-    suspend fun signOut(): Unit = authenticationRemoteDataSource.signOut()
+    suspend fun signOut() {
+        authenticationLocalDataSource.clearUserCredentials()
+        authenticationRemoteDataSource.signOut()
+    }
 
     suspend fun handleAuthentication(): String {
         return if (authenticationRemoteDataSource.getAuthStatus()) {
@@ -34,7 +37,7 @@ class AuthenticationRepository(
                 )
 
             } else {
-                throw NotLoggedInException()
+                throw NotLoggedInException("No User found")
             }
         }
     }

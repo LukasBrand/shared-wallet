@@ -18,8 +18,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:onClick="@{() -> clickListener.onClick(expense)">
+        android:onClick="@{() -> clickListener.onClick(expense)}"
+        android:layout_height="100dp">
 
         <ImageView
             android:id="@+id/owner_image"
@@ -45,6 +45,7 @@
             android:layout_marginTop="4dp"
             android:layout_marginEnd="4dp"
             android:layout_marginBottom="4dp"
+            android:autoSizeTextType="uniform"
             android:text="@{expense.name}"
             app:layout_constraintBottom_toTopOf="@+id/creation_date"
             app:layout_constraintEnd_toEndOf="parent"
@@ -60,6 +61,7 @@
             android:layout_marginTop="4dp"
             android:layout_marginEnd="4dp"
             android:layout_marginBottom="4dp"
+            android:autoSizeTextType="uniform"
             app:expenseItemCreateInfo="@{expense}"
             app:layout_constraintBottom_toTopOf="@+id/participants"
             app:layout_constraintEnd_toStartOf="@+id/due_date"
@@ -73,6 +75,7 @@
             android:layout_height="0dp"
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
+            android:autoSizeTextType="uniform"
             app:expenseItemEndInfo="@{expense}"
             app:layout_constraintBottom_toBottomOf="@+id/creation_date"
             app:layout_constraintEnd_toEndOf="parent"
@@ -95,7 +98,6 @@
             app:layout_constraintVertical_bias="0.0" />
 
         <androidx.recyclerview.widget.RecyclerView
-
             android:id="@+id/participants"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -104,6 +106,7 @@
             android:layout_marginEnd="4dp"
             android:layout_marginBottom="4dp"
             android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/paid_count"
             app:layout_constraintHorizontal_bias="0.0"

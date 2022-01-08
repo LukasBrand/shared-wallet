@@ -1,4 +1,4 @@
-package com.lukasbrand.sharedwallet.datasource
+package com.lukasbrand.sharedwallet.data.datasource
 
 import android.content.Context
 import androidx.datastore.core.DataStore
@@ -40,6 +40,13 @@ class AuthenticationLocalDataSource(
         context.dataStore.edit { preferences ->
             preferences[usernameKey] = email
             preferences[passwordKey] = password
+        }
+    }
+
+    suspend fun clearUserCredentials() = withContext(ioDispatcher) {
+        context.dataStore.edit { preferences ->
+            preferences.remove(usernameKey)
+            preferences.remove(passwordKey)
         }
     }
 }

@@ -1,9 +1,8 @@
-package com.lukasbrand.sharedwallet.datasource
+package com.lukasbrand.sharedwallet.data.datasource
 
-import com.lukasbrand.sharedwallet.datasource.firestore.FirebaseAuthApi
+import com.lukasbrand.sharedwallet.data.datasource.firestore.FirebaseAuthApi
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
-import com.lukasbrand.sharedwallet.types.Result
 
 class AuthenticationRemoteDataSource(
     private val firestoreAuthApi: FirebaseAuthApi,

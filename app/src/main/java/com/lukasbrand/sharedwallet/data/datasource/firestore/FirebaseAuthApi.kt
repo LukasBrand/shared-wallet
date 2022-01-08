@@ -1,4 +1,4 @@
-package com.lukasbrand.sharedwallet.datasource.firestore
+package com.lukasbrand.sharedwallet.data.datasource.firestore
 
 import com.google.firebase.auth.FirebaseAuth
 import com.lukasbrand.sharedwallet.exception.NotLoggedInException
@@ -6,7 +6,6 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
-import com.lukasbrand.sharedwallet.types.Result
 
 class FirebaseAuthApi(private val firebaseAuth: FirebaseAuth) {
 

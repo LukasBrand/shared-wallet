@@ -1,8 +1,7 @@
-package com.lukasbrand.sharedwallet.datasource
+package com.lukasbrand.sharedwallet.data.datasource
 
 import com.lukasbrand.sharedwallet.data.model.ExpenseApiModel
-import com.lukasbrand.sharedwallet.datasource.firestore.FirestoreApi
-import com.lukasbrand.sharedwallet.types.Result
+import com.lukasbrand.sharedwallet.data.datasource.firestore.FirestoreApi
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -30,5 +29,10 @@ class ExpensesRemoteDataSource(
         withContext(ioDispatcher) {
             firestoreApi.getExpenses(authId)
         }
+
+    @ExperimentalCoroutinesApi
+    suspend fun getExpense(expenseId: String): Flow<ExpenseApiModel> = withContext(ioDispatcher) {
+        firestoreApi.getExpense(expenseId)
+    }
 
 }

@@ -1,7 +1,8 @@
 package com.lukasbrand.sharedwallet.ioc
 
-import com.lukasbrand.sharedwallet.datasource.firestore.FirebaseAuthApi
-import com.lukasbrand.sharedwallet.datasource.firestore.FirestoreApi
+import com.lukasbrand.sharedwallet.data.datasource.firestore.FirebaseAuthApi
+import com.lukasbrand.sharedwallet.data.datasource.firestore.FirestoreApi
+import com.lukasbrand.sharedwallet.services.message.firebase.FirebaseMessageApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,5 +23,11 @@ class FirebaseModule {
     @Singleton
     fun provideFirestoreApi(): FirestoreApi {
         return FirestoreApi.getInstance()
+    }
+
+    @Provides
+    @Singleton
+    fun provideFirestoreMessageApi(): FirebaseMessageApi {
+        return FirebaseMessageApi.getInstance()
     }
 }

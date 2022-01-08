@@ -1,6 +1,5 @@
 package com.lukasbrand.sharedwallet.binding
 
-import android.content.res.Resources
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -9,14 +8,8 @@ import com.lukasbrand.sharedwallet.data.ExpenseParticipant
 import com.lukasbrand.sharedwallet.exhaustive
 import com.lukasbrand.sharedwallet.types.Result
 import com.lukasbrand.sharedwallet.types.UiState
-import java.math.BigDecimal
+import com.lukasbrand.sharedwallet.utils.convertTimestampToFormatted
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-
-private fun convertTimestampToFormatted(time: LocalDateTime, resources: Resources): CharSequence {
-    val formatter = DateTimeFormatter.ofPattern("dd-MMMM-yyyy")
-    return time.format(formatter)
-}
 
 @BindingAdapter("expensePotentialEmailInfo")
 fun TextView.setPotentialEmail(email: UiState<String>) {

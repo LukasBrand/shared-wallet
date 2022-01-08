@@ -1,21 +1,18 @@
 package com.lukasbrand.sharedwallet
 
-import android.location.Location
-import android.location.LocationManager
 import androidx.test.platform.app.InstrumentationRegistry
-import com.google.type.LatLng
+import com.google.android.gms.maps.model.LatLng
 import com.lukasbrand.sharedwallet.data.Expense
 import com.lukasbrand.sharedwallet.data.User
-import com.lukasbrand.sharedwallet.datasource.ExpensesRemoteDataSource
-import com.lukasbrand.sharedwallet.datasource.UsersRemoteDataSource
-import com.lukasbrand.sharedwallet.datasource.firestore.FirestoreApi
+import com.lukasbrand.sharedwallet.data.datasource.ExpensesRemoteDataSource
+import com.lukasbrand.sharedwallet.data.datasource.UsersRemoteDataSource
+import com.lukasbrand.sharedwallet.data.datasource.firestore.FirestoreApi
 import kotlinx.coroutines.Dispatchers
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 import java.time.LocalDateTime
-import java.util.*
 
 class FirestoreDataSourceTest {
 
@@ -38,12 +35,12 @@ class FirestoreDataSourceTest {
 
     @Test
     fun insertAndGetExpense() {
-        val ownerParticipant = User("1", "TestOwner", "test@mail.de", null)
+        val ownerParticipant = User("1", "TestOwner", "test@mail.de", "", null)
         val expense = Expense(
             "1",
             "TestExpense",
             ownerParticipant,
-            LatLng.getDefaultInstance(),
+            LatLng(0.0, 0.0),
             LocalDateTime.now(),
             LocalDateTime.now(),
             BigDecimal(""),

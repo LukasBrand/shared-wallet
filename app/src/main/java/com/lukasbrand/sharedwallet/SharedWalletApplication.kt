@@ -2,13 +2,18 @@ package com.lukasbrand.sharedwallet
 
 import android.app.Application
 import com.google.android.libraries.places.api.Places
+import com.lukasbrand.sharedwallet.services.message.MessageSendService
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltAndroidApp
 class SharedWalletApplication : Application() {
+
+    @Inject
+    lateinit var messageSendService: MessageSendService
 
     private val applicationScope = CoroutineScope(Dispatchers.Default)
 
@@ -21,6 +26,7 @@ class SharedWalletApplication : Application() {
     private fun delayedInit() {
         applicationScope.launch {
             //Delayed start logic goes here
+            println(messageSendService.getToken())
 
         }
     }

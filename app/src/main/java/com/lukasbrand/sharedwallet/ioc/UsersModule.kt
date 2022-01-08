@@ -1,8 +1,8 @@
 package com.lukasbrand.sharedwallet.ioc
 
-import com.lukasbrand.sharedwallet.datasource.UsersRemoteDataSource
-import com.lukasbrand.sharedwallet.datasource.firestore.FirestoreApi
-import com.lukasbrand.sharedwallet.repository.UsersRepository
+import com.lukasbrand.sharedwallet.data.datasource.UsersRemoteDataSource
+import com.lukasbrand.sharedwallet.data.datasource.firestore.FirestoreApi
+import com.lukasbrand.sharedwallet.data.repository.UsersRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

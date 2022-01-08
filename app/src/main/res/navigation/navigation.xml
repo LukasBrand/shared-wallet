@@ -28,8 +28,8 @@
         android:label="show_expense_fragment"
         tools:layout="@layout/show_expense_fragment" >
         <argument
-            android:name="expenseId"
-            app:argType="string" />
+            android:name="expense"
+            app:argType="com.lukasbrand.sharedwallet.data.Expense" />
         <action
             android:id="@+id/action_showExpenseFragment_to_listExpensesFragment"
             app:destination="@id/listExpensesFragment" />
@@ -82,6 +82,9 @@
         <action
             android:id="@+id/action_updateExpenseFragment_to_showExpenseFragment"
             app:destination="@id/showExpenseFragment" />
+        <argument
+            android:name="expense"
+            app:argType="com.lukasbrand.sharedwallet.data.Expense" />
     </fragment>
     <fragment
         android:id="@+id/showAccountFragment"
