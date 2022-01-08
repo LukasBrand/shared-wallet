@@ -140,6 +140,7 @@ class ShowExpenseViewModel @Inject constructor(
     fun onExpensePaidClicked() {
         viewModelScope.launch {
             val ownerNotificationToken = expense.value.owner.notificationToken
+
             messageSendService.sendNotificationToUser(
                 ownerNotificationToken,
                 "Someone has paid!",
