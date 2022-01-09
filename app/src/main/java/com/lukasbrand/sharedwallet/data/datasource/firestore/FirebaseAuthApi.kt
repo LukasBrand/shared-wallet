@@ -154,4 +154,35 @@ class FirebaseAuthApi(private val firebaseAuth: FirebaseAuth) {
                     continuation.cancel()
                 }
         }
+
+    suspend fun deleteUser(email: String, password: String): Unit =
+        suspendCancellableCoroutine { continuation ->
+            val credential = EmailAuthProvider.getCredential(email, password)
+            firebaseAuth.currentUser!!.reauthenticate(credential)
+                /* This is currently bugged
+                .addOnSuccessListener {
+                    continuation.resume(true)
+                */
+                .addOnCompleteListener { reauthenticateSuccess ->
+                    if (reauthenticateSuccess.isSuccessful) {
+                        firebaseAuth.currentUser!!.delete()
+                            /*.addOnSuccessListener {
+                                continuation.resume(Unit)
+                            }*/
+                            .addOnCompleteListener { deleteSuccessful ->
+                                if (deleteSuccessful.isSuccessful) {
+                                    continuation.resume(Unit)
+                                }
+                            }.addOnFailureListener { exception ->
+                                continuation.resumeWithException(exception)
+                            }.addOnCanceledListener {
+                                continuation.cancel()
+                            }
+                    }
+                }.addOnFailureListener { exception ->
+                    continuation.resumeWithException(exception)
+                }.addOnCanceledListener {
+                    continuation.cancel()
+                }
+        }
 }

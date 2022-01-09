@@ -39,4 +39,9 @@ class AuthenticationRemoteDataSource(
         withContext(ioDispatcher) {
             firestoreAuthApi.updatePassword(oldEmail, oldPassword, newPassword)
         }
+
+    suspend fun deleteUser(email: String, password: String): Unit =
+        withContext(ioDispatcher) {
+            firestoreAuthApi.deleteUser(email, password)
+        }
 }

@@ -3,22 +3,28 @@ package com.lukasbrand.sharedwallet.services
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
-import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.lukasbrand.sharedwallet.R
+import com.lukasbrand.sharedwallet.data.repository.AuthenticationRepository
 import com.lukasbrand.sharedwallet.data.repository.UsersRepository
+import com.lukasbrand.sharedwallet.exception.NotLoggedInException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class NotificationService : FirebaseMessagingService() {
 
     @Inject
+    lateinit var authenticationRepository: AuthenticationRepository
+
+    @Inject
     lateinit var usersRepository: UsersRepository
 
     override fun onMessageReceived(message: RemoteMessage) {
-        createNotificationChannel()
         val builder =
             NotificationCompat.Builder(this, getString(R.string.default_notification_channel_id))
                 .setSmallIcon(R.drawable.ic_baseline_attach_money_24)
@@ -33,9 +39,17 @@ class NotificationService : FirebaseMessagingService() {
         }
     }
 
-    override fun onNewToken(p0: String) {
-        //TODO: Modify user token if updated on server
-        //usersRepository.modifyUser()
+    override fun onNewToken(newToken: String) {
+        //TODO: should be tested
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val userId = authenticationRepository.handleAuthentication()
+                val user = usersRepository.getUser(userId)
+                usersRepository.modifyUser(user.copy(notificationToken = newToken))
+            } catch (e: NotLoggedInException) {
+                //This is fine as the token will be fetched on user creation
+            }
+        }
     }
 
     override fun onCreate() {

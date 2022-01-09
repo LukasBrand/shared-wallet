@@ -171,10 +171,10 @@ class FirestoreApi(private val firebaseFirestore: FirebaseFirestore) {
                 }
         }
 
-    suspend fun removeUser(userApiModel: UserApiModel): Unit =
+    suspend fun removeUser(userId: String): Unit =
         suspendCancellableCoroutine { continuation ->
             val removeUserDocRef =
-                firebaseFirestore.collection(USER_COLLECTION).document(userApiModel.id)
+                firebaseFirestore.collection(USER_COLLECTION).document(userId)
             removeUserDocRef.delete()
                 /*.addOnSuccessListener {
                     continuation.resume(Unit)

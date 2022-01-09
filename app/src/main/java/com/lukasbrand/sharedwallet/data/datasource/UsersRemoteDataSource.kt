@@ -20,8 +20,8 @@ class UsersRemoteDataSource(
         firestoreApi.modifyUser(userApiModel)
     }
 
-    suspend fun removeUser(userApiModel: UserApiModel): Unit = withContext(ioDispatcher) {
-        firestoreApi.removeUser(userApiModel)
+    suspend fun removeUser(userId: String): Unit = withContext(ioDispatcher) {
+        firestoreApi.removeUser(userId)
     }
 
     suspend fun getUserIdFromEmail(email: String): UserApiModel? = withContext(ioDispatcher) {

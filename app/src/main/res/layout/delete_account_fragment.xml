@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="deleteAccountViewModel"
+            type="com.lukasbrand.sharedwallet.ui.account.delete.DeleteAccountViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.account.show.ShowAccountFragment">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/fragment_horizontal_margin"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:context=".ui.account.update.UpdateAccountFragment">
+
+                <TextView
+                    android:id="@+id/delete_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:text="Please re-enter your login information to remove your account." />
+
+                <TextView
+                    android:id="@+id/delete_account_email_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:text="Email:" />
+
+                <EditText
+                    android:id="@+id/delete_account_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:autofillHints="emailAddress"
+                    android:inputType="textEmailAddress"
+                    android:textSize="30sp"
+                    app:uiStateString="@={deleteAccountViewModel.email}" />
+
+
+                <TextView
+                    android:id="@+id/delete_account_password_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:text="Password:" />
+
+                <EditText
+                    android:id="@+id/delete_account_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:autofillHints="password"
+                    android:inputType="textPassword"
+                    android:textSize="30sp"
+                    app:uiStateString="@={deleteAccountViewModel.password}" />
+
+                <Button
+                    android:id="@+id/delete_account_delete_action"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="4dp"
+                    android:text="DELETE ACCOUNT" />
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

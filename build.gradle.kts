@@ -17,7 +17,7 @@ buildscript {
     }
 }
 
-tasks.create<Delete>("clean") {
+tasks.register<Delete>("clean") {
     group = "build"
     delete(rootProject.buildDir)
 }

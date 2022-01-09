@@ -49,4 +49,8 @@ class AuthenticationRepository(
     suspend fun updatePassword(oldEmail: String, oldPassword: String, newPassword: String) {
         authenticationRemoteDataSource.updatePassword(oldEmail, oldPassword, newPassword)
     }
+
+    suspend fun deleteUser(email: String, password: String) {
+        authenticationRemoteDataSource.deleteUser(email, password)
+    }
 }

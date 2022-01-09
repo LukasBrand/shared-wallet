@@ -196,7 +196,8 @@ class ShowExpenseFragment : Fragment() {
                 //coroutine launch scope only the first will be executed. Could be a bug
                 launch {
                     viewModel.isOwner.collect {
-                        menu.findItem(R.id.show_expense_menu_edit_expense).isEnabled = it
+                        //currently always false as this feature is not created
+                        menu.findItem(R.id.show_expense_menu_edit_expense).isEnabled = false
                         menu.findItem(R.id.show_expense_menu_remove_expense).isEnabled = it
                     }
                 }
