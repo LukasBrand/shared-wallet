@@ -7,12 +7,13 @@ import com.google.type.LatLng
 import com.lukasbrand.sharedwallet.data.ExpenseParticipant
 import com.lukasbrand.sharedwallet.data.NewExpense
 import com.lukasbrand.sharedwallet.data.User
-import com.lukasbrand.sharedwallet.exception.ExpenseNotCompleteException
-import com.lukasbrand.sharedwallet.exception.ParticipantAlreadyExistsException
-import com.lukasbrand.sharedwallet.exhaustive
 import com.lukasbrand.sharedwallet.data.repository.AuthenticationRepository
 import com.lukasbrand.sharedwallet.data.repository.ExpensesRepository
 import com.lukasbrand.sharedwallet.data.repository.UsersRepository
+import com.lukasbrand.sharedwallet.exception.ExpenseNotCompleteException
+import com.lukasbrand.sharedwallet.exception.ParticipantAlreadyExistsException
+import com.lukasbrand.sharedwallet.exhaustive
+import com.lukasbrand.sharedwallet.services.message.MessageSendService
 import com.lukasbrand.sharedwallet.types.Navigator
 import com.lukasbrand.sharedwallet.types.Result
 import com.lukasbrand.sharedwallet.types.UiState
@@ -28,7 +29,8 @@ import javax.inject.Inject
 class CreateExpenseViewModel @Inject constructor(
     private val authenticationRepository: AuthenticationRepository,
     private val expensesRepository: ExpensesRepository,
-    private val usersRepository: UsersRepository
+    private val usersRepository: UsersRepository,
+    private val messageSendService: MessageSendService
 ) : ViewModel() {
 
     init {
@@ -277,25 +279,40 @@ class CreateExpenseViewModel @Inject constructor(
             val participants = when (val p = _participants.value) {
                 is UiState.Set<List<ExpenseParticipant>> -> p.data
                 UiState.Unset -> {
-                    _createExpenseCompleted.value = Navigator.Error(ExpenseNotCompleteException("Missing participants"))
+                    _createExpenseCompleted.value =
+                        Navigator.Error(ExpenseNotCompleteException("Missing participants"))
                     return@launch
                 }
             }.exhaustive
 
+
+            val newExpense = NewExpense(
+                name = name,
+                owner = owner,
+                location = location,
+                creationDate = creationDate,
+                dueDate = dueDate,
+                expenseAmount = expenseAmount,
+                participants = participants
+            )
+
             try {
-                val newExpense = NewExpense(
-                    name = name,
-                    owner = owner,
-                    location = location,
-                    creationDate = creationDate,
-                    dueDate = dueDate,
-                    expenseAmount = expenseAmount,
-                    participants = participants
-                )
                 expensesRepository.addExpense(newExpense)
                 _createExpenseCompleted.value = Navigator.Navigate(Unit)
             } catch (exception: Exception) {
                 _createExpenseCompleted.value = Navigator.Error(exception)
+            }
+
+            //Inform all participants except owner about the new expense
+            for (participant in participants) {
+                if (participant.user.id != owner.id) {
+                    val ownerNotificationToken = participant.user.notificationToken
+                    messageSendService.sendNotificationToUser(
+                        ownerNotificationToken,
+                        "New Expense created!",
+                        "${owner.name} has created a new expense for $name and you are invited!"
+                    )
+                }
             }
         }
     }

@@ -23,7 +23,6 @@ class LoginViewModel @Inject constructor(private val authenticationRepository: A
 
 
     fun login() {
-        println("TEST")
         _navigateToListExpenses.value = Navigator.Loading
         viewModelScope.launch {
             val email = when (val e = email.value) {
@@ -39,9 +38,6 @@ class LoginViewModel @Inject constructor(private val authenticationRepository: A
                     return@launch
                 }
             }.exhaustive
-
-            println(email)
-            println(password)
 
             try {
                 authenticationRepository.signInWithEmailAndPassword(email, password)

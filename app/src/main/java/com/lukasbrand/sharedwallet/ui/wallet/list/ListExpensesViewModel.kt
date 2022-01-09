@@ -30,7 +30,6 @@ class ListExpensesViewModel @Inject constructor(
     val userId: StateFlow<Result<String>> = flow {
         try {
             val id = authenticationRepository.handleAuthentication()
-            println("ID:" + id)
             emit(Result.Success(id))
         } catch (e: Exception) {
             emit(Result.Error(e))
@@ -43,7 +42,6 @@ class ListExpensesViewModel @Inject constructor(
 
     @ExperimentalCoroutinesApi
     val expenses: StateFlow<List<Expense>> = userId.flatMapLatest { userIdResult ->
-        println("HERE:" + userIdResult)
         val userId = when (userIdResult) {
             is Result.Success -> {
                 userIdResult.data
@@ -53,7 +51,6 @@ class ListExpensesViewModel @Inject constructor(
         }.exhaustive
         expensesRepository.getExpenses(userId)
     }.map { listOfExpenseApiModel ->
-        println("HERE:" + listOfExpenseApiModel)
         listOfExpenseApiModel.map { expenseApiModel ->
             val owner = usersRepository.getUser(expenseApiModel.owner)
             val participants = expenseApiModel.participants.mapIndexed { index, userId ->

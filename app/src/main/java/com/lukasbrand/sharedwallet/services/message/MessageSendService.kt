@@ -19,11 +19,11 @@ class MessageSendService @Inject constructor(
 
     suspend fun sendNotificationToUser(userToken: String, title: String, message: String) =
         withContext(Dispatchers.IO) {
-            println(sendApiService.sendNotificationToUser(
+            sendApiService.sendNotificationToUser(
                 NotificationMessage(
                     userToken,
                     Notification(title, message)
                 )
-            ))
+            )
         }
 }

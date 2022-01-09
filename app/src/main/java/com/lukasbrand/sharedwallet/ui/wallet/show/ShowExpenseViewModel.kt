@@ -6,10 +6,12 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
 import com.lukasbrand.sharedwallet.data.Expense
 import com.lukasbrand.sharedwallet.data.ExpenseParticipant
+import com.lukasbrand.sharedwallet.data.repository.AuthenticationRepository
 import com.lukasbrand.sharedwallet.data.repository.ExpensesRepository
 import com.lukasbrand.sharedwallet.data.repository.UsersRepository
 import com.lukasbrand.sharedwallet.services.message.MessageSendService
 import com.lukasbrand.sharedwallet.types.Navigator
+import com.lukasbrand.sharedwallet.types.UiState
 import com.lukasbrand.sharedwallet.utils.convertTimestampToFormatted
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -21,9 +23,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ShowExpenseViewModel @Inject constructor(
-    usersRepository: UsersRepository,
-    expensesRepository: ExpensesRepository,
     savedStateHandle: SavedStateHandle,
+    private val authenticationRepository: AuthenticationRepository,
+    private val usersRepository: UsersRepository,
+    private val expensesRepository: ExpensesRepository,
     private val messageSendService: MessageSendService
 ) : ViewModel() {
 
@@ -139,13 +142,27 @@ class ShowExpenseViewModel @Inject constructor(
     @ExperimentalCoroutinesApi
     fun onExpensePaidClicked() {
         viewModelScope.launch {
-            val ownerNotificationToken = expense.value.owner.notificationToken
+            val userId = authenticationRepository.handleAuthentication()
+            val participants = expense.value.participants.toMutableList()
 
-            messageSendService.sendNotificationToUser(
-                ownerNotificationToken,
-                "Someone has paid!",
-                "User this and that has paid"
-            )
+            participants.replaceAll {
+                if (it.user.id == userId) {
+                    it.copy(hasPaid = !it.hasPaid)
+                } else {
+                    it
+                }
+            }
+            expensesRepository.modifyExpense(expense.value.copy(participants = participants))
+
+            //Inform the owner about the update except it is himself
+            if (expense.value.owner.id != userId) {
+                val ownerNotificationToken = expense.value.owner.notificationToken
+                messageSendService.sendNotificationToUser(
+                    ownerNotificationToken,
+                    "Someone has paid!",
+                    "User this and that has paid"
+                )
+            }
         }
     }
 

@@ -52,9 +52,14 @@ class FirestoreApi(private val firebaseFirestore: FirebaseFirestore) {
             val modifyExpenseDocRef =
                 firebaseFirestore.collection(EXPENSE_COLLECTION).document(expenseApiModel.id!!)
             modifyExpenseDocRef.set(expenseApiModel)
-                .addOnSuccessListener {
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        continuation.resume(Unit)
+                    }
+                }
+                /*.addOnSuccessListener {
                     continuation.resume(Unit)
-                }.addOnFailureListener { exception ->
+                }*/.addOnFailureListener { exception ->
                     continuation.resumeWithException(exception)
                 }
         }

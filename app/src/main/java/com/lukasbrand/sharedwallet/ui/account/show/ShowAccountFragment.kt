@@ -23,8 +23,11 @@ class ShowAccountFragment : Fragment() {
         val binding: ShowAccountFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.show_account_fragment, container, false)
 
-        binding.lifecycleOwner = viewLifecycleOwner
-        binding.showAccountViewModel = viewModel
+
+        binding.apply {
+            lifecycleOwner = viewLifecycleOwner
+            showAccountViewModel = viewModel
+        }
 
         return binding.root
     }

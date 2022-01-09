@@ -92,9 +92,7 @@ class CreateExpenseFragment : Fragment() {
                                 println(navigator.exception.stackTrace.toString())
                             }
                             Navigator.Loading -> {}
-                            Navigator.Stay -> {
-                                println("stays")
-                            }
+                            Navigator.Stay -> {                            }
                         }.exhaustive
                     }
                 }
@@ -208,7 +206,6 @@ class CreateExpenseFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.create_expense -> {
-                println("triggered")
                 viewModel.createExpense()
                 true
             }

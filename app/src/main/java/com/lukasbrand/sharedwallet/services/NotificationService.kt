@@ -29,8 +29,6 @@ class NotificationService : FirebaseMessagingService() {
         val id = message.messageId.hashCode()
 
         with(NotificationManagerCompat.from(this)) {
-            // notificationId is a unique int for each notification that you must define
-            println(builder.build())
             notify(id, builder.build())
         }
     }
