@@ -47,7 +47,6 @@ class ShowAccountFragment : Fragment() {
                 //This is not clear to me. If two StateFlows are collected inside a single
                 //coroutine launch scope only the first will be executed. Could be a bug
                 launch {
-
                     viewModel.navigateToEditAccount.collect { navigator ->
                         when (navigator) {
                             is Navigator.Navigate -> {
@@ -76,13 +75,11 @@ class ShowAccountFragment : Fragment() {
     }
 
 
-    //Options menu integration:
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.show_account_menu, menu)
     }
 
-    //TODO: bind actions to menu elements
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.show_account_menu_delete_account -> {

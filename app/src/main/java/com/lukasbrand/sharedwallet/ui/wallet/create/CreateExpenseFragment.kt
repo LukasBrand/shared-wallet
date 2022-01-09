@@ -61,6 +61,42 @@ class CreateExpenseFragment : Fragment() {
             })
         )
 
+        binding.apply {
+            lifecycleOwner = viewLifecycleOwner
+            createExpenseViewModel = viewModel
+            createExpenseParticipants.adapter = adapter
+
+            createExpenseCreationDate.setOnClickListener(this@CreateExpenseFragment::clickDataPicker)
+            createExpenseDueDate.setOnClickListener(this@CreateExpenseFragment::clickDataPicker)
+            createExpensePriceSmall.setOnClickListener {
+                viewModel.expenseAmount.value = UiState.Set("10.00")
+            }
+            createExpensePriceMiddle.setOnClickListener {
+                viewModel.expenseAmount.value = UiState.Set("20.00")
+            }
+            createExpensePriceHigh.setOnClickListener {
+                viewModel.expenseAmount.value = UiState.Set("50.00")
+            }
+            createExpenseAddParticipants.setOnClickListener {
+                viewModel.addParticipant()
+            }
+            createExpenseLocation.setOnClickListener {
+                // Set the fields to specify which types of place data to return after the user has made a selection.
+                val fields = listOf(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG)
+
+                val lastQuery = when (val lastQuery = viewModel.locationQuery.value) {
+                    is UiState.Set -> lastQuery.data
+                    UiState.Unset -> ""
+                }.exhaustive
+
+                val intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
+                    .setInitialQuery(lastQuery)
+                    .build(requireContext())
+
+                startForResult.launch(intent)
+            }
+        }
+
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
 
@@ -120,42 +156,6 @@ class CreateExpenseFragment : Fragment() {
                 }
             }
         }
-
-        binding.apply {
-            lifecycleOwner = viewLifecycleOwner
-            createExpenseViewModel = viewModel
-            createExpenseParticipants.adapter = adapter
-
-            createExpenseCreationDate.setOnClickListener(this@CreateExpenseFragment::clickDataPicker)
-            createExpenseDueDate.setOnClickListener(this@CreateExpenseFragment::clickDataPicker)
-            createExpensePriceSmall.setOnClickListener {
-                viewModel.expenseAmount.value = UiState.Set("10.00")
-            }
-            createExpensePriceMiddle.setOnClickListener {
-                viewModel.expenseAmount.value = UiState.Set("20.00")
-            }
-            createExpensePriceHigh.setOnClickListener {
-                viewModel.expenseAmount.value = UiState.Set("50.00")
-            }
-            createExpenseAddParticipants.setOnClickListener {
-                viewModel.addParticipant()
-            }
-            createExpenseLocation.setOnClickListener {
-                // Set the fields to specify which types of place data to return after the user has made a selection.
-                val fields = listOf(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG)
-
-                val lastQuery = when (val lastQuery = viewModel.locationQuery.value) {
-                    is UiState.Set -> lastQuery.data
-                    UiState.Unset -> ""
-                }.exhaustive
-
-                val intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
-                    .setInitialQuery(lastQuery)
-                    .build(requireContext())
-
-                startForResult.launch(intent)
-            }
-        }
         return binding.root
     }
 
@@ -181,6 +181,7 @@ class CreateExpenseFragment : Fragment() {
         datePickerDialog.show()
     }
 
+    //TODO Dirty code, needs rework
     private fun clickTimePickerCreation(date: LocalDateTime) {
         val timePickerDialog = TimePickerDialog(
             requireContext(), { _, hour, minute ->
@@ -193,6 +194,7 @@ class CreateExpenseFragment : Fragment() {
         timePickerDialog.show()
     }
 
+    //TODO Dirty code, needs rework
     private fun clickTimePickerDue(date: LocalDateTime) {
         val timePickerDialog = TimePickerDialog(
             requireContext(), { _, hour, minute ->
@@ -244,7 +246,6 @@ class CreateExpenseFragment : Fragment() {
         }
 
 
-    //Options menu integration:
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.create_expense_menu, menu)

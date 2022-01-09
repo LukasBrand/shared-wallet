@@ -21,7 +21,6 @@ class LoginViewModel @Inject constructor(private val authenticationRepository: A
 
     val password: MutableStateFlow<UiState<String>> = MutableStateFlow(UiState.Unset)
 
-
     fun login() {
         _navigateToListExpenses.value = Navigator.Loading
         viewModelScope.launch {
@@ -48,20 +47,6 @@ class LoginViewModel @Inject constructor(private val authenticationRepository: A
         }
 
     }
-
-
-    private fun isEmailValid(username: String): Boolean {
-        return if (username.contains("@")) {
-            Patterns.EMAIL_ADDRESS.matcher(username).matches()
-        } else {
-            username.isNotBlank()
-        }
-    }
-
-    private fun isPasswordValid(password: String): Boolean {
-        return password.length > 5
-    }
-
 
     private val _navigateToListExpenses: MutableStateFlow<Navigator<Unit>> =
         MutableStateFlow(Navigator.Stay)

@@ -177,7 +177,6 @@ class ShowExpenseFragment : Fragment() {
     }
 
 
-    //Options menu integration:
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.show_expense_menu, menu)
@@ -201,7 +200,6 @@ class ShowExpenseFragment : Fragment() {
 
     }
 
-    //TODO: bind actions to menu elements
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.show_expense_menu_edit_expense -> {

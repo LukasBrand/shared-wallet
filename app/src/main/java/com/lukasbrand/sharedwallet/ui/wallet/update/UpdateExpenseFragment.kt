@@ -25,9 +25,10 @@ class UpdateExpenseFragment : Fragment() {
         val binding: UpdateExpenseFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.update_expense_fragment, container, false)
 
-        binding.lifecycleOwner = viewLifecycleOwner
-        binding.updateExpenseViewModel = viewModel
-
+        binding.apply {
+            lifecycleOwner = viewLifecycleOwner
+            updateExpenseViewModel = viewModel
+        }
         return binding.root
     }
 

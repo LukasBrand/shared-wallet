@@ -24,29 +24,28 @@ class TitleFragment : Fragment() {
         val binding: TitleFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.title_fragment, container, false)
 
-        binding.lifecycleOwner = viewLifecycleOwner
-        binding.titleViewModel = viewModel
+        binding.apply {
+            lifecycleOwner = viewLifecycleOwner
+            titleViewModel = viewModel
+            emailRegister.setOnClickListener {
+                findNavController().navigate(
+                    TitleFragmentDirections.actionTitleFragmentToCreateAccountFragment()
+                )
+            }
+            emailLogin.setOnClickListener {
+                findNavController().navigate(
+                    TitleFragmentDirections.actionTitleFragmentToLoginFragment()
+                )
+            }
 
-        binding.emailRegister.setOnClickListener {
-            this.findNavController().navigate(
-                TitleFragmentDirections.actionTitleFragmentToCreateAccountFragment()
-            )
+            googleLogin.setOnClickListener {
+                //Open Google Intent
+            }
+            githubLogin.setOnClickListener {
+                //Open Github Intent
+            }
+
         }
-
-        binding.emailLogin.setOnClickListener {
-            this.findNavController().navigate(
-                TitleFragmentDirections.actionTitleFragmentToLoginFragment()
-            )
-        }
-
-        binding.googleLogin.setOnClickListener {
-            //Open Google Intent
-        }
-
-        binding.githubLogin.setOnClickListener {
-            //Open Github Intent
-        }
-
         return binding.root
     }
 }

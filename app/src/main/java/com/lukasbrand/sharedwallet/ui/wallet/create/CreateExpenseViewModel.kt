@@ -49,9 +49,7 @@ class CreateExpenseViewModel @Inject constructor(
     //two way binding. Therefore only a public mutable state flow
     val name: MutableStateFlow<UiState<String>> = MutableStateFlow(UiState.Unset)
 
-
     private val _owner: MutableStateFlow<UiState<User>> = MutableStateFlow(UiState.Unset)
-
 
     private val _location: MutableStateFlow<UiState<LatLng>> = MutableStateFlow(UiState.Unset)
     val location: StateFlow<UiState<LatLng>> = _location

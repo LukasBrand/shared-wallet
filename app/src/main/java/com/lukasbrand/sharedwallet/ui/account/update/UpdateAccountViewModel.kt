@@ -34,7 +34,6 @@ class UpdateAccountViewModel @Inject constructor(
         initialValue = savedStateHandle["user"]!!
     )
 
-
     val newUsername: MutableStateFlow<UiState<String>> = MutableStateFlow(UiState.Unset)
 
     val newEmail: MutableStateFlow<UiState<String>> = MutableStateFlow(UiState.Unset)
@@ -65,13 +64,11 @@ class UpdateAccountViewModel @Inject constructor(
                 }
             }
         }.exhaustive
-
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
         initialValue = ""
     )
-
 
     fun updateAccount() {
         var oldEmail = user.value.email

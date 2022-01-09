@@ -35,6 +35,15 @@ class LoginFragment : Fragment() {
         val binding: LoginFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.login_fragment, container, false)
 
+        binding.apply {
+            lifecycleOwner = viewLifecycleOwner
+            loginViewModel = this@LoginFragment.viewModel
+
+            loginExecute.setOnClickListener {
+                viewModel.login()
+            }
+        }
+
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
 
@@ -63,16 +72,6 @@ class LoginFragment : Fragment() {
                 }
             }
         }
-
-        binding.apply {
-            lifecycleOwner = viewLifecycleOwner
-            loginViewModel = this@LoginFragment.viewModel
-
-            loginExecute.setOnClickListener {
-                viewModel.login()
-            }
-        }
-
         return binding.root
     }
 }

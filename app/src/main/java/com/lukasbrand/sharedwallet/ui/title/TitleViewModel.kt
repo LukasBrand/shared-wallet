@@ -7,19 +7,12 @@ import javax.inject.Inject
 @HiltViewModel
 class TitleViewModel @Inject constructor() : ViewModel() {
 
-
-    fun onEmailRegister() {
-
-    }
-
-    fun onEmailLogin() {
-
-    }
-
+    //TODO
     fun onGoogleLogin() {
 
     }
 
+    //TODO
     fun onGitHubLogin() {
 
     }

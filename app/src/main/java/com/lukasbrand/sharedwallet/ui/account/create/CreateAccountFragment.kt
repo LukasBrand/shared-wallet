@@ -26,8 +26,10 @@ class CreateAccountFragment : Fragment() {
         val binding: CreateAccountFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.create_account_fragment, container, false)
 
-        binding.lifecycleOwner = viewLifecycleOwner
-        binding.createAccountViewModel = viewModel
+        binding.apply {
+            lifecycleOwner = viewLifecycleOwner
+            createAccountViewModel = viewModel
+        }
 
         viewModel.onAccountCreated.observe(viewLifecycleOwner) {
             this.findNavController().navigate(

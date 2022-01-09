@@ -27,7 +27,6 @@ class ShowAccountViewModel @Inject constructor(
         initialValue = User("", "", "", "", null)
     )
 
-
     @ExperimentalCoroutinesApi
     val username: StateFlow<String> = user.mapLatest {
         it.name

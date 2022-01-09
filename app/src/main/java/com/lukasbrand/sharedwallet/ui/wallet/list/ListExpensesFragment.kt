@@ -138,13 +138,11 @@ class ListExpensesFragment : Fragment() {
     }
 
 
-    //Options menu integration:
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.list_expenses_menu, menu)
     }
 
-    //TODO: bind actions to menu elements
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.show_account -> {
