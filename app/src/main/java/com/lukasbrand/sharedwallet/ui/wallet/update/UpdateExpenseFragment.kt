@@ -20,6 +20,8 @@ class UpdateExpenseFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        requireActivity().title = getString(R.string.update_expense_title)
+
         val binding: UpdateExpenseFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.update_expense_fragment, container, false)
 

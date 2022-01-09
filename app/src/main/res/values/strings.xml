@@ -33,4 +33,7 @@
     <string name="show_account_title">Account Information</string>
     <string name="delete_account_title">Delete Account</string>
     <string name="show_account_menu_delete">Delete Account</string>
+    <string name="create_account_title">Create Account</string>
+    <string name="login_account_title">Login</string>
+    <string name="update_expense_title">Update Expense</string>
 </resources>

@@ -21,6 +21,8 @@ class CreateAccountFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        requireActivity().title = getString(R.string.create_account_title)
+
         val binding: CreateAccountFragmentBinding =
             DataBindingUtil.inflate(inflater, R.layout.create_account_fragment, container, false)
 
