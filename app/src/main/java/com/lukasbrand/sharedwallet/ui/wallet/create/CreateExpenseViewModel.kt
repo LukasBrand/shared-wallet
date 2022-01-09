@@ -65,8 +65,16 @@ class CreateExpenseViewModel @Inject constructor(
         MutableStateFlow(UiState.Unset)
     val creationDate: StateFlow<UiState<LocalDateTime>> = _creationDate
 
+    val creationDateTime: MutableStateFlow<Boolean> = MutableStateFlow(false)
+
     fun setCreationDate(date: LocalDateTime) {
         _creationDate.value = UiState.Set(date)
+        creationDateTime.value = true
+    }
+
+    fun setCreationDateTime(date: LocalDateTime) {
+        _creationDate.value = UiState.Set(date)
+        creationDateTime.value = false
     }
 
 
@@ -74,8 +82,16 @@ class CreateExpenseViewModel @Inject constructor(
         MutableStateFlow(UiState.Unset)
     val dueDate: StateFlow<UiState<LocalDateTime>> = _dueDate
 
+    val dueDateTime: MutableStateFlow<Boolean> = MutableStateFlow(false);
+
     fun setDueDate(date: LocalDateTime) {
         _dueDate.value = UiState.Set(date)
+        dueDateTime.value = true
+    }
+
+    fun setDueDateTime(date: LocalDateTime) {
+        _dueDate.value = UiState.Set(date)
+        dueDateTime.value = false
     }
 
     //two way binding. Therefore only a public mutable state flow
@@ -196,14 +212,11 @@ class CreateExpenseViewModel @Inject constructor(
                     val mutableParticipants = participants.data.toMutableList()
                     mutableParticipants.map { participant ->
                         if (participant.user.id == participantId) {
-                            println("Tries to change percentage")
                             participant.copy(expensePercentage = percent)
                         } else {
                             participant
                         }
                     }
-                    println(_participants.value)
-                    println(mutableParticipants)
                     _participants.value = UiState.Set(mutableParticipants)
                 }
                 UiState.Unset -> {}
@@ -285,6 +298,14 @@ class CreateExpenseViewModel @Inject constructor(
                 }
             }.exhaustive
 
+            //Dirty code to give every participant the same part of the expense amount
+            val participantsCount = participants.size
+            val percent: Int = 100 / participantsCount
+
+
+            val participantsWithExpenseAmounts = participants.toMutableList().map {
+                it.copy(expensePercentage = percent)
+            }
 
             val newExpense = NewExpense(
                 name = name,
@@ -293,7 +314,7 @@ class CreateExpenseViewModel @Inject constructor(
                 creationDate = creationDate,
                 dueDate = dueDate,
                 expenseAmount = expenseAmount,
-                participants = participants
+                participants = participantsWithExpenseAmounts
             )
 
             try {

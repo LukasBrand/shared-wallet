@@ -28,15 +28,15 @@
             android:background="@drawable/circle"
             android:contentDescription="@string/expense_owner_image_description"
             android:gravity="center_horizontal|center_vertical"
-            app:participantItemInitials="@{participant}"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/expense_name"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.50"
-            />
+            app:layout_constraintVertical_bias="0.454"
+            app:participantBackgroundHasPaid="@{participant}"
+            app:participantItemInitials="@{participant}" />
 
         <TextView
             android:id="@+id/expense_name"

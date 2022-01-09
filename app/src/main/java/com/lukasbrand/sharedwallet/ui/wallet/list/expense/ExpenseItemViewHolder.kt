@@ -1,10 +1,11 @@
-package com.lukasbrand.sharedwallet.ui.wallet.list.item
+package com.lukasbrand.sharedwallet.ui.wallet.list.expense
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.lukasbrand.sharedwallet.data.Expense
 import com.lukasbrand.sharedwallet.databinding.ListExpenseItemBinding
+import com.lukasbrand.sharedwallet.ui.wallet.list.expense.participant.ParticipantsAdapter
 
 /**
  * Creates an item view holder which represents an item inside the expenses list (recycler view).
@@ -23,9 +24,14 @@ class ExpenseItemViewHolder private constructor(val binding: ListExpenseItemBind
         }
     }
 
-    fun bind(item: Expense, clickListener: ExpenseItemListener) {
+    fun bind(
+        item: Expense,
+        clickListener: ExpenseItemListener,
+        participantsAdapter: ParticipantsAdapter
+    ) {
         binding.expense = item
         binding.clickListener = clickListener
+        binding.participants.adapter = participantsAdapter
         binding.executePendingBindings()
     }
 }

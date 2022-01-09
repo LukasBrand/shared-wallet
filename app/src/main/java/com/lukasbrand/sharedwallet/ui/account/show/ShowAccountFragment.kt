@@ -64,8 +64,6 @@ class ShowAccountFragment : Fragment() {
                                     "Could not switch to Edit Account: '${navigator.exception.message}'",
                                     Toast.LENGTH_SHORT
                                 ).show()
-                                println(navigator.exception.message)
-                                println(navigator.exception.stackTrace.toString())
                             }
                             Navigator.Loading -> {}
                             Navigator.Stay -> {}

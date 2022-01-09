@@ -2,6 +2,7 @@ package com.lukasbrand.sharedwallet.ui.wallet.create
 
 import android.app.Activity
 import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
@@ -30,6 +31,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.*
 import com.google.android.gms.maps.model.LatLng as MapsLatLng
 
@@ -88,12 +90,32 @@ class CreateExpenseFragment : Fragment() {
                                     "Could not create Expense: '${navigator.exception.message}'",
                                     Toast.LENGTH_SHORT
                                 ).show()
-                                println(navigator.exception.message)
-                                println(navigator.exception.stackTrace.toString())
                             }
                             Navigator.Loading -> {}
-                            Navigator.Stay -> {                            }
+                            Navigator.Stay -> {}
                         }.exhaustive
+                    }
+                }
+                launch {
+                    viewModel.creationDateTime.collect {
+                        if (it) {
+                            when (val d = viewModel.creationDate.value) {
+                                is UiState.Set -> clickTimePickerCreation(d.data)
+                                UiState.Unset -> {}
+                            }.exhaustive
+
+                        }
+                    }
+                }
+                launch {
+                    viewModel.dueDateTime.collect {
+                        if (it) {
+                            when (val d = viewModel.creationDate.value) {
+                                is UiState.Set -> clickTimePickerDue(d.data)
+                                UiState.Unset -> {}
+                            }.exhaustive
+
+                        }
                     }
                 }
             }
@@ -158,6 +180,31 @@ class CreateExpenseFragment : Fragment() {
         )
         datePickerDialog.show()
     }
+
+    private fun clickTimePickerCreation(date: LocalDateTime) {
+        val timePickerDialog = TimePickerDialog(
+            requireContext(), { _, hour, minute ->
+                viewModel.setCreationDateTime(date.toLocalDate().atTime(hour, minute))
+            },
+            0,
+            0,
+            true
+        )
+        timePickerDialog.show()
+    }
+
+    private fun clickTimePickerDue(date: LocalDateTime) {
+        val timePickerDialog = TimePickerDialog(
+            requireContext(), { _, hour, minute ->
+                viewModel.setDueDateTime(date.toLocalDate().atTime(hour, minute))
+            },
+            0,
+            0,
+            true
+        )
+        timePickerDialog.show()
+    }
+
 
     //Location activity registration
     private val startForResult =

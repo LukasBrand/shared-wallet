@@ -81,7 +81,7 @@
                 android:id="@+id/show_expense_expense_amount_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Expense Amount:" />
+                android:text="Expense Amount: (Own part / Full cost)" />
 
             <TextView
                 android:id="@+id/show_expense_expense_amount"

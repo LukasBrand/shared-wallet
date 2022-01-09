@@ -195,14 +195,11 @@ class UpdateExpenseViewModel @Inject constructor(
                     val mutableParticipants = participants.data.toMutableList()
                     mutableParticipants.map { participant ->
                         if (participant.user.id == participantId) {
-                            println("Tries to change percentage")
                             participant.copy(expensePercentage = percent)
                         } else {
                             participant
                         }
                     }
-                    println(_participants.value)
-                    println(mutableParticipants)
                     _participants.value = UiState.Set(mutableParticipants)
                 }
                 UiState.Unset -> {}

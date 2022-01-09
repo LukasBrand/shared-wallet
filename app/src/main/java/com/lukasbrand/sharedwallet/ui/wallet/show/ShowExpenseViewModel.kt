@@ -121,7 +121,9 @@ class ShowExpenseViewModel @Inject constructor(
 
     @ExperimentalCoroutinesApi
     val expenseAmount: StateFlow<String> = expense.mapLatest {
-        it.expenseAmount.toPlainString()
+        it.expenseAmount.divide(BigDecimal(participants.value.size))
+            .setScale(2, BigDecimal.ROUND_HALF_EVEN)
+            .toPlainString() + " / " + it.expenseAmount.toPlainString()
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
@@ -142,6 +144,7 @@ class ShowExpenseViewModel @Inject constructor(
     fun onExpensePaidClicked() {
         viewModelScope.launch {
             val userId = authenticationRepository.handleAuthentication()
+            val user = usersRepository.getUser(userId)
             val participants = expense.value.participants.toMutableList()
 
             participants.replaceAll {
@@ -158,8 +161,8 @@ class ShowExpenseViewModel @Inject constructor(
                 val ownerNotificationToken = expense.value.owner.notificationToken
                 messageSendService.sendNotificationToUser(
                     ownerNotificationToken,
-                    "Someone has paid!",
-                    "User this and that has paid"
+                    "${user.name} has paid for ${expense.value.name}!",
+                    "Your participant ${user.name} has paid the expense ${expense.value.name}"
                 )
             }
         }

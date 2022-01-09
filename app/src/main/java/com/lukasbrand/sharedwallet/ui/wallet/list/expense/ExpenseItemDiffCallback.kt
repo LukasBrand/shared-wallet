@@ -1,4 +1,4 @@
-package com.lukasbrand.sharedwallet.ui.wallet.list.item
+package com.lukasbrand.sharedwallet.ui.wallet.list.expense
 
 import androidx.recyclerview.widget.DiffUtil
 import com.lukasbrand.sharedwallet.data.Expense

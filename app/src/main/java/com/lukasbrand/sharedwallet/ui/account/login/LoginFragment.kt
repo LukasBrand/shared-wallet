@@ -51,8 +51,6 @@ class LoginFragment : Fragment() {
                                     "Could not log in: '${navigator.exception.message}'",
                                     Toast.LENGTH_SHORT
                                 ).show()
-                                println(navigator.exception.message)
-                                println(navigator.exception.stackTrace.toString())
                             }
                             Navigator.Stay -> {}
                             Navigator.Loading -> {

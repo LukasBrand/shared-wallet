@@ -1,15 +1,12 @@
 package com.lukasbrand.sharedwallet.ui.wallet.create.participant
 
-import android.content.res.Resources
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.lukasbrand.sharedwallet.R
-import com.lukasbrand.sharedwallet.data.Expense
 import com.lukasbrand.sharedwallet.data.ExpenseParticipant
-import java.util.*
 
 
 @BindingAdapter("participantItemImage")
@@ -46,3 +43,15 @@ fun SeekBar.setPercentage(item: ExpenseParticipant?) {
         progress = item.expensePercentage
     }
 }
+
+@BindingAdapter("participantBackgroundHasPaid")
+fun TextView.setBackground(item: ExpenseParticipant?) {
+    item?.let {
+        if (item.hasPaid) {
+            background.setTint(resources.getColor(R.color.red, null))
+        } else {
+            background.setTint(resources.getColor(R.color.black, null))
+        }
+    }
+}
+

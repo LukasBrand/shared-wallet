@@ -12,35 +12,41 @@
 
         <variable
             name="clickListener"
-            type="com.lukasbrand.sharedwallet.ui.wallet.list.item.ExpenseItemListener" />
+            type="com.lukasbrand.sharedwallet.ui.wallet.list.expense.ExpenseItemListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
-        android:onClick="@{() -> clickListener.onClick(expense)}"
-        android:layout_height="100dp">
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> clickListener.onClick(expense)}">
 
-        <ImageView
+        <TextView
             android:id="@+id/owner_image"
-            android:layout_width="100dp"
-            android:layout_height="0dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_marginStart="4dp"
             android:layout_marginTop="4dp"
-            android:layout_marginEnd="4dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="4dp"
+            android:autoSizeTextType="uniform"
+            android:background="@drawable/circle"
             android:contentDescription="@string/expense_owner_image_description"
-            app:expenseItemOwnerImage="@{expense}"
-            app:layout_constraintBottom_toBottomOf="@+id/creation_date"
+            android:gravity="center_horizontal|center_vertical"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/expense_name"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.0"
+            android:backgroundTint="@color/black"
+            app:ownerInitials="@{expense.owner}" />
 
         <TextView
             android:id="@+id/expense_name"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="4dp"
@@ -57,7 +63,7 @@
         <TextView
             android:id="@+id/creation_date"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="4dp"
             android:layout_marginBottom="4dp"
@@ -72,7 +78,7 @@
         <TextView
             android:id="@+id/due_date"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
             android:autoSizeTextType="uniform"
@@ -86,7 +92,7 @@
         <TextView
             android:id="@+id/paid_count"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
             android:layout_marginBottom="4dp"
@@ -94,22 +100,22 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/participants"
-            app:layout_constraintTop_toTopOf="@+id/participants"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toTopOf="@+id/participants" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/participants"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="4dp"
             android:layout_marginBottom="4dp"
+            android:onClick="@{() -> clickListener.onClick(expense)}"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/paid_count"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/creation_date" />
     </androidx.constraintlayout.widget.ConstraintLayout>

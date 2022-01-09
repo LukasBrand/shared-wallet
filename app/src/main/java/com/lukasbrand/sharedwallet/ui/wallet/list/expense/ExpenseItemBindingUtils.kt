@@ -1,19 +1,25 @@
-package com.lukasbrand.sharedwallet.ui.wallet.list.item
+package com.lukasbrand.sharedwallet.ui.wallet.list.expense
 
-import android.content.res.Resources
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.lukasbrand.sharedwallet.R
 import com.lukasbrand.sharedwallet.data.Expense
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
+import com.lukasbrand.sharedwallet.data.User
+import com.lukasbrand.sharedwallet.utils.convertTimestampToFormatted
 
 
 @BindingAdapter("expenseItemOwnerImage")
 fun ImageView.setOwnerImage(item: Expense?) {
     item?.let {
         setImageBitmap(item.owner.image)
+    }
+}
+
+@BindingAdapter("ownerInitials")
+fun TextView.setOwnerInitials(item: User?) {
+    item?.let {
+        text = item.name[0].toString()
     }
 }
 
@@ -36,9 +42,4 @@ fun TextView.setPaidCountInfo(item: Expense?) {
     item?.let {
         text = context.getString(R.string.expense_item_paid_count, item.participants.stream().filter { it.hasPaid }.count(), item.participants.size)
     }
-}
-
-private fun convertTimestampToFormatted(time: LocalDateTime, resources: Resources): CharSequence {
-    val formatter = DateTimeFormatter.ofPattern("dd-MMMM-yyyy")
-    return time.format(formatter)
 }

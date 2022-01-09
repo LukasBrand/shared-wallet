@@ -85,7 +85,6 @@ class ShowExpenseFragment : Fragment() {
 
                 launch {
                     viewModel.participants.collect { participants ->
-                        println(participants)
                         adapter.submitList(participants)
                     }
                 }
@@ -107,8 +106,6 @@ class ShowExpenseFragment : Fragment() {
                                     "Could not switch to Edit Expense: '${navigator.exception.message}'",
                                     Toast.LENGTH_SHORT
                                 ).show()
-                                println(navigator.exception.message)
-                                println(navigator.exception.stackTrace.toString())
                             }
                             Navigator.Loading -> {}
                             Navigator.Stay -> {}
@@ -131,8 +128,6 @@ class ShowExpenseFragment : Fragment() {
                                     "Could not switch to List Expenses: '${navigator.exception.message}'",
                                     Toast.LENGTH_SHORT
                                 ).show()
-                                println(navigator.exception.message)
-                                println(navigator.exception.stackTrace.toString())
                             }
                             Navigator.Loading -> {}
                             Navigator.Stay -> {}
