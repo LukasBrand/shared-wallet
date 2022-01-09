@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.lukasbrand.sharedwallet.data.User
 import com.lukasbrand.sharedwallet.data.repository.AuthenticationRepository
 import com.lukasbrand.sharedwallet.data.repository.UsersRepository
+import com.lukasbrand.sharedwallet.types.Navigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
@@ -17,12 +18,9 @@ class ShowAccountViewModel @Inject constructor(
     usersRepository: UsersRepository
 ) : ViewModel() {
 
-
-    private val user: StateFlow<User> = flow {
+    val user: StateFlow<User> = flow {
         val userId = authenticationRepository.handleAuthentication()
-        val user = usersRepository.getUser(userId)
-
-        emit(user)
+        emitAll(usersRepository.getUserAsFlow(userId))
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
@@ -70,4 +68,17 @@ class ShowAccountViewModel @Inject constructor(
         initialValue = ""
     )
 
+
+    private val _navigateToEditAccount: MutableStateFlow<Navigator<Unit>> =
+        MutableStateFlow(Navigator.Stay)
+    val navigateToEditAccount: StateFlow<Navigator<Unit>>
+        get() = _navigateToEditAccount
+
+    fun onAccountEdit() {
+        _navigateToEditAccount.value = Navigator.Navigate(Unit)
+    }
+
+    fun onAccountShownNavigated() {
+        _navigateToEditAccount.value = Navigator.Stay
+    }
 }

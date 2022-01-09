@@ -56,6 +56,10 @@ object UiStateBinder {
     @InverseBindingAdapter(attribute = "uiStateString", event = "uiStateStringAttrChanged")
     @JvmStatic
     fun getUiStateString(editText: EditText): UiState<String> {
-        return UiState.Set(editText.text.toString())
+        return if (editText.text.toString().isNotBlank()) {
+            UiState.Set(editText.text.toString())
+        } else {
+            UiState.Unset
+        }
     }
 }

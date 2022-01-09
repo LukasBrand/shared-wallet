@@ -37,4 +37,9 @@ class UsersRemoteDataSource(
     suspend fun getUser(userId: String): UserApiModel = withContext(ioDispatcher) {
         firestoreApi.getUser(userId)
     }
+
+    @ExperimentalCoroutinesApi
+    suspend fun getUserAsFlow(userId: String): Flow<UserApiModel> = withContext(ioDispatcher) {
+        firestoreApi.getUserAsFlow(userId)
+    }
 }

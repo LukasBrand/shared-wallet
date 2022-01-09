@@ -41,4 +41,12 @@ class AuthenticationRepository(
             }
         }
     }
+
+    suspend fun updateEmailAddress(oldEmail: String, oldPassword: String, newEmail: String) {
+        authenticationRemoteDataSource.updateEmailAddress(oldEmail, oldPassword, newEmail)
+    }
+
+    suspend fun updatePassword(oldEmail: String, oldPassword: String, newPassword: String) {
+        authenticationRemoteDataSource.updatePassword(oldEmail, oldPassword, newPassword)
+    }
 }

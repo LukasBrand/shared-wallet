@@ -29,4 +29,14 @@ class AuthenticationRemoteDataSource(
     suspend fun getUserId(): String = withContext(ioDispatcher) {
         firestoreAuthApi.getUserId()
     }
+
+    suspend fun updateEmailAddress(oldEmail: String, oldPassword: String, newEmail: String): Unit =
+        withContext(ioDispatcher) {
+            firestoreAuthApi.updateEmailAddress(oldEmail, oldPassword, newEmail)
+        }
+
+    suspend fun updatePassword(oldEmail: String, oldPassword: String, newPassword: String): Unit =
+        withContext(ioDispatcher) {
+            firestoreAuthApi.updatePassword(oldEmail, oldPassword, newPassword)
+        }
 }

@@ -16,7 +16,7 @@
         tools:context=".ui.account.show.ShowAccountFragment">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/list_expenses_create_expense"
+            android:id="@+id/update_account_apply_changes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
@@ -48,7 +48,7 @@
                 tools:context=".ui.account.update.UpdateAccountFragment">
 
                 <TextView
-                    android:id="@+id/show_account_user_image"
+                    android:id="@+id/update_account_user_image"
                     android:layout_width="200dp"
                     android:layout_height="200dp"
                     android:layout_margin="4dp"
@@ -57,6 +57,7 @@
                     android:gravity="center_horizontal|center_vertical"
                     android:text="@{updateAccountViewModel.initials}"
                     android:textColor="@color/white" />
+
 
                 <TextView
                     android:id="@+id/update_account_user_name_info"
@@ -72,8 +73,9 @@
                     android:layout_margin="4dp"
                     android:autofillHints="username"
                     android:inputType="textPersonName"
-                    android:text="@={updateAccountViewModel.username}"
-                    android:textSize="30sp" />
+                    android:textSize="30sp"
+                    app:uiStateString="@={updateAccountViewModel.newUsername}" />
+
 
                 <TextView
                     android:id="@+id/update_account_email_info"
@@ -89,8 +91,9 @@
                     android:layout_margin="4dp"
                     android:autofillHints="emailAddress"
                     android:inputType="textEmailAddress"
-                    android:text="@={updateAccountViewModel.email}"
-                    android:textSize="30sp" />
+                    android:textSize="30sp"
+                    app:uiStateString="@={updateAccountViewModel.newEmail}" />
+
 
                 <TextView
                     android:id="@+id/update_account_password_info"
@@ -106,8 +109,27 @@
                     android:layout_margin="4dp"
                     android:autofillHints="password"
                     android:inputType="textPassword"
-                    android:text="@={updateAccountViewModel.email}"
-                    android:textSize="30sp" />
+                    android:textSize="30sp"
+                    app:uiStateString="@={updateAccountViewModel.newPassword}" />
+
+
+                <TextView
+                    android:id="@+id/update_account_old_password_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="4dp"
+                    android:layout_marginTop="32dp"
+                    android:text="Old Password:" />
+
+                <EditText
+                    android:id="@+id/update_account_old_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:autofillHints="password"
+                    android:inputType="textPassword"
+                    android:textSize="30sp"
+                    app:uiStateString="@={updateAccountViewModel.oldPassword}" />
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>

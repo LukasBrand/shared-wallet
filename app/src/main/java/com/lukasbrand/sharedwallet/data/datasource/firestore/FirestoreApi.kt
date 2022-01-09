@@ -148,8 +148,13 @@ class FirestoreApi(private val firebaseFirestore: FirebaseFirestore) {
             val modifyUserDocRef =
                 firebaseFirestore.collection(USER_COLLECTION).document(userApiModel.id)
             modifyUserDocRef.set(userApiModel)
-                .addOnSuccessListener {
+                /*.addOnSuccessListener {
                     continuation.resume(Unit)
+                }*/
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        continuation.resume(Unit)
+                    }
                 }.addOnFailureListener { exception ->
                     continuation.resumeWithException(exception)
                 }
@@ -160,16 +165,20 @@ class FirestoreApi(private val firebaseFirestore: FirebaseFirestore) {
             val removeUserDocRef =
                 firebaseFirestore.collection(USER_COLLECTION).document(userApiModel.id)
             removeUserDocRef.delete()
-                .addOnSuccessListener {
+                /*.addOnSuccessListener {
                     continuation.resume(Unit)
+                }*/
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        continuation.resume(Unit)
+                    }
                 }.addOnFailureListener { exception ->
                     continuation.resumeWithException(exception)
                 }
         }
 
-    //maybe needs to be suspended
     @ExperimentalCoroutinesApi
-    fun getUsers(userIds: Array<out String>): Flow<List<UserApiModel>> = callbackFlow {
+    suspend fun getUsers(userIds: Array<out String>): Flow<List<UserApiModel>> = callbackFlow {
         val userQuery =
             firebaseFirestore.collection(USER_COLLECTION)
                 .whereIn(FieldPath.documentId(), mutableListOf(userIds))
@@ -214,4 +223,22 @@ class FirestoreApi(private val firebaseFirestore: FirebaseFirestore) {
                 }
             FieldPath.documentId()
         }
+
+    @ExperimentalCoroutinesApi
+    suspend fun getUserAsFlow(userId: String): Flow<UserApiModel> = callbackFlow {
+        val userQuery =
+            firebaseFirestore.collection(USER_COLLECTION)
+                .whereEqualTo(FieldPath.documentId(), userId)
+
+        val snapshotListener = userQuery.addSnapshotListener { value, _ ->
+            if (value != null) {
+                val user: UserApiModel = value.toObjects(UserApiModel::class.java).first()
+                trySend(user)
+            }
+        }
+
+        awaitClose {
+            snapshotListener.remove()
+        }
+    }
 }

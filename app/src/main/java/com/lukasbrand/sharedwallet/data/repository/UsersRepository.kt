@@ -1,9 +1,9 @@
 package com.lukasbrand.sharedwallet.data.repository
 
-import com.lukasbrand.sharedwallet.types.Result
 import com.lukasbrand.sharedwallet.data.User
-import com.lukasbrand.sharedwallet.data.model.UserApiModel
 import com.lukasbrand.sharedwallet.data.datasource.UsersRemoteDataSource
+import com.lukasbrand.sharedwallet.data.model.UserApiModel
+import com.lukasbrand.sharedwallet.types.Result
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -11,17 +11,20 @@ import kotlinx.coroutines.flow.map
 class UsersRepository(private val usersRemoteDataSource: UsersRemoteDataSource) {
 
     suspend fun addUser(user: User) {
-        val userApiModel: UserApiModel = user.run { UserApiModel(id, name, email, notificationToken, image) }
+        val userApiModel: UserApiModel =
+            user.run { UserApiModel(id, name, email, notificationToken, image) }
         usersRemoteDataSource.addUser(userApiModel)
     }
 
     suspend fun modifyUser(user: User) {
-        val userApiModel: UserApiModel = user.run { UserApiModel(id, name, email, notificationToken, image) }
+        val userApiModel: UserApiModel =
+            user.run { UserApiModel(id, name, email, notificationToken, image) }
         usersRemoteDataSource.modifyUser(userApiModel)
     }
 
     suspend fun removeUser(user: User) {
-        val userApiModel: UserApiModel = user.run { UserApiModel(id, name, email, notificationToken, image) }
+        val userApiModel: UserApiModel =
+            user.run { UserApiModel(id, name, email, notificationToken, image) }
         usersRemoteDataSource.removeUser(userApiModel)
     }
 
@@ -31,7 +34,13 @@ class UsersRepository(private val usersRemoteDataSource: UsersRemoteDataSource) 
                 Result.Error(NullPointerException())
             } else {
                 val user =
-                    User(userApiModel.id, userApiModel.name, userApiModel.email, userApiModel.notificationToken ,userApiModel.image)
+                    User(
+                        userApiModel.id,
+                        userApiModel.name,
+                        userApiModel.email,
+                        userApiModel.notificationToken,
+                        userApiModel.image
+                    )
                 Result.Success(user)
             }
         }
@@ -41,6 +50,14 @@ class UsersRepository(private val usersRemoteDataSource: UsersRemoteDataSource) 
         usersRemoteDataSource.getUser(userId).run {
             User(id, name, email, notificationToken, image)
         }
+
+    suspend fun getUserAsFlow(userId: String): Flow<User> =
+        usersRemoteDataSource.getUserAsFlow(userId).map { userApiModel ->
+            userApiModel.run {
+                User(id, name, email, notificationToken, image)
+            }
+        }
+
 
     @ExperimentalCoroutinesApi
     suspend fun getUsers(vararg userIds: String): Flow<List<User>> =

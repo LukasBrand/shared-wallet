@@ -1,5 +1,6 @@
 package com.lukasbrand.sharedwallet.data.datasource.firestore
 
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.lukasbrand.sharedwallet.exception.NotLoggedInException
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -91,4 +92,66 @@ class FirebaseAuthApi(private val firebaseAuth: FirebaseAuth) {
             continuation.resume(firebaseAuth.currentUser!!.uid)
         }
     }
+
+    suspend fun updateEmailAddress(oldEmail: String, oldPassword: String, newEmail: String): Unit =
+        suspendCancellableCoroutine { continuation ->
+            val credential = EmailAuthProvider.getCredential(oldEmail, oldPassword)
+            firebaseAuth.currentUser!!.reauthenticate(credential)
+                /* This is currently bugged
+                .addOnSuccessListener {
+                    continuation.resume(true)
+                */
+                .addOnCompleteListener { reauthenticateSuccess ->
+                    if (reauthenticateSuccess.isSuccessful) {
+                        firebaseAuth.currentUser!!.updateEmail(newEmail)
+                            /*.addOnSuccessListener {
+                                continuation.resume(Unit)
+                            }*/
+                            .addOnCompleteListener { updateSuccess ->
+                                if (updateSuccess.isSuccessful) {
+                                    continuation.resume(Unit)
+                                }
+                            }.addOnFailureListener { exception ->
+                                continuation.resumeWithException(exception)
+                            }.addOnCanceledListener {
+                                continuation.cancel()
+                            }
+                    }
+                }.addOnFailureListener { exception ->
+                    continuation.resumeWithException(exception)
+                }.addOnCanceledListener {
+                    continuation.cancel()
+                }
+        }
+
+    suspend fun updatePassword(oldEmail: String, oldPassword: String, newPassword: String): Unit =
+        suspendCancellableCoroutine { continuation ->
+            val credential = EmailAuthProvider.getCredential(oldEmail, oldPassword)
+            firebaseAuth.currentUser!!.reauthenticate(credential)
+                /* This is currently bugged
+                .addOnSuccessListener {
+                    continuation.resume(true)
+                */
+                .addOnCompleteListener { reauthenticateSuccess ->
+                    if (reauthenticateSuccess.isSuccessful) {
+                        firebaseAuth.currentUser!!.updatePassword(newPassword)
+                            /*.addOnSuccessListener {
+                                continuation.resume(Unit)
+                            }*/
+                            .addOnCompleteListener { updateSuccess ->
+                                if (updateSuccess.isSuccessful) {
+                                    continuation.resume(Unit)
+                                }
+                            }.addOnFailureListener { exception ->
+                                continuation.resumeWithException(exception)
+                            }.addOnCanceledListener {
+                                continuation.cancel()
+                            }
+                    }
+                }.addOnFailureListener { exception ->
+                    continuation.resumeWithException(exception)
+                }.addOnCanceledListener {
+                    continuation.cancel()
+                }
+        }
 }
