@@ -19,9 +19,8 @@ class ExpensesRepository(private val expensesRemoteDataSource: ExpensesRemoteDat
         expensesRemoteDataSource.modifyExpense(expenseApiModel)
     }
 
-    suspend fun removeExpense(expense: Expense) {
-        val expenseApiModel = ExpenseApiModel(expense)
-        expensesRemoteDataSource.removeExpense(expenseApiModel)
+    suspend fun removeExpense(expenseId: String) {
+        expensesRemoteDataSource.removeExpense(expenseId)
     }
 
     @ExperimentalCoroutinesApi
@@ -29,7 +28,7 @@ class ExpensesRepository(private val expensesRemoteDataSource: ExpensesRemoteDat
         expensesRemoteDataSource.getExpenses(authId)
 
     @ExperimentalCoroutinesApi
-    suspend fun getExpense(expenseId: String): Flow<ExpenseApiModel> =
+    suspend fun getExpense(expenseId: String): Flow<ExpenseApiModel?> =
         expensesRemoteDataSource.getExpense(expenseId)
 
 

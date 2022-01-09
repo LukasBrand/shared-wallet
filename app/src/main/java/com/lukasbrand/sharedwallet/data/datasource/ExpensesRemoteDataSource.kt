@@ -20,8 +20,8 @@ class ExpensesRemoteDataSource(
         firestoreApi.modifyExpense(expenseApiModel)
     }
 
-    suspend fun removeExpense(expenseApiModel: ExpenseApiModel): Unit = withContext(ioDispatcher) {
-        firestoreApi.removeExpense(expenseApiModel)
+    suspend fun removeExpense(expenseId: String): Unit = withContext(ioDispatcher) {
+        firestoreApi.removeExpense(expenseId)
     }
 
     @ExperimentalCoroutinesApi
@@ -31,7 +31,7 @@ class ExpensesRemoteDataSource(
         }
 
     @ExperimentalCoroutinesApi
-    suspend fun getExpense(expenseId: String): Flow<ExpenseApiModel> = withContext(ioDispatcher) {
+    suspend fun getExpense(expenseId: String): Flow<ExpenseApiModel?> = withContext(ioDispatcher) {
         firestoreApi.getExpense(expenseId)
     }
 

@@ -115,6 +115,30 @@ class ShowExpenseFragment : Fragment() {
                         }.exhaustive
                     }
                 }
+
+                launch {
+                    viewModel.navigateToListExpenses.collect { navigator ->
+                        when (navigator) {
+                            is Navigator.Navigate -> {
+                                findNavController().navigate(
+                                    ShowExpenseFragmentDirections.actionShowExpenseFragmentToListExpensesFragment()
+                                )
+                                viewModel.onListExpensesNavigated()
+                            }
+                            is Navigator.Error -> {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Could not switch to List Expenses: '${navigator.exception.message}'",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                println(navigator.exception.message)
+                                println(navigator.exception.stackTrace.toString())
+                            }
+                            Navigator.Loading -> {}
+                            Navigator.Stay -> {}
+                        }.exhaustive
+                    }
+                }
             }
         }
 
@@ -164,6 +188,23 @@ class ShowExpenseFragment : Fragment() {
         inflater.inflate(R.menu.show_expense_menu, menu)
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+
+                //This is not clear to me. If two StateFlows are collected inside a single
+                //coroutine launch scope only the first will be executed. Could be a bug
+                launch {
+                    viewModel.isOwner.collect {
+                        menu.findItem(R.id.show_expense_menu_edit_expense).isEnabled = it
+                        menu.findItem(R.id.show_expense_menu_remove_expense).isEnabled = it
+                    }
+                }
+            }
+        }
+
+    }
+
     //TODO: bind actions to menu elements
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
@@ -172,6 +213,7 @@ class ShowExpenseFragment : Fragment() {
                 true
             }
             R.id.show_expense_menu_remove_expense -> {
+                viewModel.onExpenseRemoveClicked()
                 true
             }
             R.id.show_expense_menu_paid_expense -> {

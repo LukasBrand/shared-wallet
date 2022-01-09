@@ -11,7 +11,6 @@ import com.lukasbrand.sharedwallet.data.repository.ExpensesRepository
 import com.lukasbrand.sharedwallet.data.repository.UsersRepository
 import com.lukasbrand.sharedwallet.services.message.MessageSendService
 import com.lukasbrand.sharedwallet.types.Navigator
-import com.lukasbrand.sharedwallet.types.UiState
 import com.lukasbrand.sharedwallet.utils.convertTimestampToFormatted
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -35,36 +34,53 @@ class ShowExpenseViewModel @Inject constructor(
         val initialExpense: Expense = savedStateHandle["expense"]!!
         val expense =
             expensesRepository.getExpense(initialExpense.id).mapLatest { expenseApiModel ->
-                val owner = usersRepository.getUser(expenseApiModel.owner)
-                val participants = expenseApiModel.participants.mapIndexed { index, userId ->
-                    val participant = usersRepository.getUser(userId)
-                    ExpenseParticipant(
-                        participant,
-                        expenseApiModel.participantExpensePercentage[index],
-                        expenseApiModel.hasPaid[index],
-                        participant.id == owner.id
+                if (expenseApiModel != null) {
+                    val owner = usersRepository.getUser(expenseApiModel.owner)
+                    val participants = expenseApiModel.participants.mapIndexed { index, userId ->
+                        val participant = usersRepository.getUser(userId)
+                        ExpenseParticipant(
+                            participant,
+                            expenseApiModel.participantExpensePercentage[index],
+                            expenseApiModel.hasPaid[index],
+                            participant.id == owner.id
+                        )
+                    }
+                    Expense(
+                        expenseApiModel.id!!,
+                        expenseApiModel.name,
+                        owner,
+                        LatLng(
+                            expenseApiModel.location.latitude,
+                            expenseApiModel.location.longitude
+                        ),
+                        expenseApiModel.creationDate.toDate().toInstant()
+                            .atZone(ZoneId.systemDefault())
+                            .toLocalDateTime(),
+                        expenseApiModel.dueDate.toDate().toInstant()
+                            .atZone(ZoneId.systemDefault())
+                            .toLocalDateTime(),
+                        BigDecimal(expenseApiModel.expenseAmount),
+                        participants
                     )
+                } else {
+                    initialExpense
                 }
-                Expense(
-                    expenseApiModel.id!!,
-                    expenseApiModel.name,
-                    owner,
-                    LatLng(expenseApiModel.location.latitude, expenseApiModel.location.longitude),
-                    expenseApiModel.creationDate.toDate().toInstant()
-                        .atZone(ZoneId.systemDefault())
-                        .toLocalDateTime(),
-                    expenseApiModel.dueDate.toDate().toInstant()
-                        .atZone(ZoneId.systemDefault())
-                        .toLocalDateTime(),
-                    BigDecimal(expenseApiModel.expenseAmount),
-                    participants
-                )
             }
         emitAll(expense)
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
         initialValue = savedStateHandle["expense"]!!
+    )
+
+    @ExperimentalCoroutinesApi
+    val isOwner: StateFlow<Boolean> = expense.mapLatest {
+        val userId = authenticationRepository.handleAuthentication()
+        it.owner.id == userId
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = false
     )
 
     @ExperimentalCoroutinesApi
@@ -122,23 +138,6 @@ class ShowExpenseViewModel @Inject constructor(
     )
 
 
-    //Clickable Expense
-    private val _navigateToExpenseUpdate: MutableStateFlow<Navigator<Expense>> =
-        MutableStateFlow(Navigator.Stay)
-    val navigateToExpenseUpdate: StateFlow<Navigator<Expense>>
-        get() = _navigateToExpenseUpdate
-
-    @ExperimentalCoroutinesApi
-    fun onExpenseUpdateClicked() {
-        println(expense.value)
-        _navigateToExpenseUpdate.value = Navigator.Navigate(expense.value)
-    }
-
-    fun onExpenseUpdateNavigated() {
-        _navigateToExpenseUpdate.value = Navigator.Stay
-    }
-
-
     @ExperimentalCoroutinesApi
     fun onExpensePaidClicked() {
         viewModelScope.launch {
@@ -166,4 +165,54 @@ class ShowExpenseViewModel @Inject constructor(
         }
     }
 
+    @ExperimentalCoroutinesApi
+    fun onExpenseRemoveClicked() {
+        viewModelScope.launch {
+            val expenseName = expense.value.name
+            val ownerName = expense.value.owner.name
+            val notificationTokens = expense.value.participants.mapNotNull {
+                if (expense.value.owner.id != it.user.id) {
+                    it.user.notificationToken
+                } else {
+                    null
+                }
+            }
+            expensesRepository.removeExpense(expense.value.id)
+
+            //Inform the owner about the update except it is himself
+            for (notificationToken in notificationTokens) {
+                messageSendService.sendNotificationToUser(
+                    notificationToken,
+                    "Expense $expenseName removed!",
+                    "$ownerName has removed $expenseName"
+                )
+            }
+            _navigateToListExpenses.value = Navigator.Navigate(Unit)
+        }
+    }
+
+
+    private val _navigateToExpenseUpdate: MutableStateFlow<Navigator<Expense>> =
+        MutableStateFlow(Navigator.Stay)
+    val navigateToExpenseUpdate: StateFlow<Navigator<Expense>>
+        get() = _navigateToExpenseUpdate
+
+    @ExperimentalCoroutinesApi
+    fun onExpenseUpdateClicked() {
+        _navigateToExpenseUpdate.value = Navigator.Navigate(expense.value)
+    }
+
+    fun onExpenseUpdateNavigated() {
+        _navigateToExpenseUpdate.value = Navigator.Stay
+    }
+
+
+    private val _navigateToListExpenses: MutableStateFlow<Navigator<Unit>> =
+        MutableStateFlow(Navigator.Stay)
+    val navigateToListExpenses: StateFlow<Navigator<Unit>>
+        get() = _navigateToListExpenses
+
+    fun onListExpensesNavigated() {
+        _navigateToListExpenses.value = Navigator.Stay
+    }
 }

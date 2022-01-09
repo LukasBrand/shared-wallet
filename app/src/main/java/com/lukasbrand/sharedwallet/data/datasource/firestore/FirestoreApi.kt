@@ -40,8 +40,13 @@ class FirestoreApi(private val firebaseFirestore: FirebaseFirestore) {
         suspendCancellableCoroutine { continuation ->
             val document = firebaseFirestore.collection(EXPENSE_COLLECTION).document()
             document.set(expenseApiModel.copy(id = document.id))
-                .addOnSuccessListener {
+                /*.addOnSuccessListener {
                     continuation.resume(Unit)
+                }*/
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        continuation.resume(Unit)
+                    }
                 }.addOnFailureListener { exception ->
                     continuation.resumeWithException(exception)
                 }
@@ -64,14 +69,20 @@ class FirestoreApi(private val firebaseFirestore: FirebaseFirestore) {
                 }
         }
 
-    suspend fun removeExpense(expenseApiModel: ExpenseApiModel): Unit =
+    suspend fun removeExpense(expenseId: String): Unit =
         suspendCancellableCoroutine { continuation ->
             val removeExpenseDocRef =
-                firebaseFirestore.collection(EXPENSE_COLLECTION).document(expenseApiModel.id!!)
+                firebaseFirestore.collection(EXPENSE_COLLECTION).document(expenseId)
             removeExpenseDocRef.delete()
-                .addOnSuccessListener {
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        continuation.resume(Unit)
+                    }
+                }
+                /*.addOnSuccessListener {
                     continuation.resume(Unit)
-                }.addOnFailureListener { exception ->
+                }*/
+                .addOnFailureListener { exception ->
                     continuation.resumeWithException(exception)
                 }
         }
@@ -102,18 +113,18 @@ class FirestoreApi(private val firebaseFirestore: FirebaseFirestore) {
     }
 
     @ExperimentalCoroutinesApi
-    suspend fun getExpense(expenseId: String): Flow<ExpenseApiModel> = callbackFlow {
+    suspend fun getExpense(expenseId: String): Flow<ExpenseApiModel?> = callbackFlow {
         val expensesQuery = firebaseFirestore.collection(EXPENSE_COLLECTION)
             .whereEqualTo(FieldPath.documentId(), expenseId)
 
         val snapshotListener =
             expensesQuery.addSnapshotListener { querySnapshot: QuerySnapshot?, firebaseException: FirebaseFirestoreException? ->
                 if (querySnapshot != null) {
-                    val expense: ExpenseApiModel = querySnapshot.documents
+                    val expense: ExpenseApiModel? = querySnapshot.documents
                         .mapNotNull { documentSnapshot ->
                             documentSnapshot.toObject(ExpenseApiModel::class.java)
                                 ?.copy(id = documentSnapshot.id)
-                        }.first()
+                        }.firstOrNull()
                     trySend(expense)
                 } else if (firebaseException != null) {
                     close(firebaseException)
